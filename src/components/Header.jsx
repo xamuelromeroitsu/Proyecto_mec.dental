@@ -3,10 +3,10 @@ export default function Header({ currentView, authData, onNavigate, onLogout }) 
     <header className="fixed w-full bg-white/95 backdrop-blur-md shadow-sm z-40 transition-all">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-20 items-center">
-          <div className="flex-shrink-0 flex items-center gap-2 cursor-pointer" onClick={() => onNavigate('landing')}>
-            <i className="fa-solid fa-tooth text-3xl text-sky-500"></i>
-            <span className="font-bold text-2xl text-slate-900 tracking-tight">Nova<span className="text-sky-500">Dent</span></span>
-            <span className="bg-sky-50 text-sky-600 text-xs font-semibold px-2.5 py-0.5 rounded border border-sky-100 ml-1">LAB</span>
+          <div className="flex-shrink-0 flex items-center gap-1.5 sm:gap-2 cursor-pointer" onClick={() => onNavigate('landing')}>
+            <i className="fa-solid fa-tooth text-2xl sm:text-3xl text-sky-500"></i>
+            <span className="font-bold text-xl sm:text-2xl text-slate-900 tracking-tight">Nova<span className="text-sky-500">Dent</span></span>
+            <span className="bg-sky-50 text-sky-600 text-[10px] sm:text-xs font-semibold px-2 sm:px-2.5 py-0.5 rounded border border-sky-100 ml-0.5 sm:ml-1">LAB</span>
           </div>
 
           <div className="flex items-center gap-6">
@@ -18,9 +18,10 @@ export default function Header({ currentView, authData, onNavigate, onLogout }) 
                 <a href="#nosotros" className="hidden md:inline-block text-slate-600 hover:text-sky-500 transition-colors font-medium">Nosotros</a>
                 <button
                   onClick={() => onNavigate('login')}
-                  className="bg-sky-500 text-white px-6 py-2.5 rounded-full font-semibold hover:bg-sky-600 transition-all shadow-md shadow-sky-200 flex items-center gap-2"
+                  className="bg-sky-500 text-white px-4 sm:px-6 py-2 sm:py-2.5 rounded-full font-semibold hover:bg-sky-600 transition-all shadow-md shadow-sky-200 flex items-center gap-1.5 sm:gap-2 text-sm sm:text-base"
                 >
-                  <i className="fa-solid fa-user-md text-sm"></i> Portal Odontólogo
+                  <i className="fa-solid fa-user-md text-xs sm:text-sm"></i>
+                  <span className="hidden sm:inline">Portal</span> Odontólogo
                 </button>
               </>
             ) : currentView === 'login' ? (
@@ -38,9 +39,9 @@ export default function Header({ currentView, authData, onNavigate, onLogout }) 
                 </div>
                 <button
                   onClick={onLogout}
-                  className="bg-red-50 text-red-600 hover:bg-red-100 border border-red-200 px-4 py-2 rounded-full font-semibold text-sm transition-all flex items-center gap-2"
+                  className="bg-red-50 text-red-600 hover:bg-red-100 border border-red-200 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full font-semibold text-xs sm:text-sm transition-all flex items-center gap-1.5 sm:gap-2"
                 >
-                  <i className="fa-solid fa-right-from-bracket"></i> Cerrar Sesión
+                  <i className="fa-solid fa-right-from-bracket"></i> <span className="hidden sm:inline">Cerrar Sesión</span><span className="sm:hidden">Salir</span>
                 </button>
               </div>
             )}

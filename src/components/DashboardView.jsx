@@ -313,18 +313,18 @@ export default function DashboardView({ orders, onAddOrder }) {
           <h2 className="text-2xl font-bold text-slate-900">Área Privada de Clínicas</h2>
           <p className="text-sm text-slate-500">Gestione solicitudes de trabajo, envíe archivos STL digitales y rastree el estado en tiempo real.</p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex gap-2 sm:gap-3">
           <button
             onClick={() => setView('list')}
-            className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all flex items-center gap-2 ${view === 'list' ? 'bg-sky-500 text-white shadow-md shadow-sky-100' : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-50'}`}
+            className={`px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center gap-1.5 sm:gap-2 ${view === 'list' ? 'bg-sky-500 text-white shadow-md shadow-sky-100' : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-50'}`}
           >
-            <i className="fa-solid fa-clipboard-list"></i> Historial de Órdenes
+            <i className="fa-solid fa-clipboard-list"></i> <span className="hidden sm:inline">Historial de Órdenes</span><span className="sm:hidden">Órdenes</span>
           </button>
           <button
             onClick={() => setView('new-order')}
-            className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all flex items-center gap-2 ${view === 'new-order' ? 'bg-sky-500 text-white shadow-md shadow-sky-100' : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-50'}`}
+            className={`px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center gap-1.5 sm:gap-2 ${view === 'new-order' ? 'bg-sky-500 text-white shadow-md shadow-sky-100' : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-50'}`}
           >
-            <i className="fa-solid fa-file-invoice text-sm"></i> Nueva Orden
+            <i className="fa-solid fa-file-invoice text-xs sm:text-sm"></i> <span className="hidden sm:inline">Nueva Orden</span><span className="sm:hidden">Crear</span>
           </button>
         </div>
       </div>

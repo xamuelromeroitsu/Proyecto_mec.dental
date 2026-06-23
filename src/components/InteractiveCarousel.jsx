@@ -52,7 +52,7 @@ export default function InteractiveCarousel({ images }) {
             <div
               key={`${image.id}-${index}`}
               onClick={() => setSelectedCase(image)}
-              className="w-80 md:w-96 flex-shrink-0 relative group cursor-pointer bg-slate-950 rounded-2xl overflow-hidden border border-slate-800 shadow-xl transition-all duration-300 hover:border-sky-500 hover:shadow-sky-950/20 hover:scale-[1.02]"
+              className="w-64 sm:w-80 md:w-96 flex-shrink-0 relative group cursor-pointer bg-slate-950 rounded-2xl overflow-hidden border border-slate-800 shadow-xl transition-all duration-300 hover:border-sky-500 hover:shadow-sky-950/20 hover:scale-[1.02]"
             >
               <div className="relative aspect-[4/3] overflow-hidden">
                 <img

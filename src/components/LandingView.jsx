@@ -4,13 +4,13 @@ import ServiceCard from './ServiceCard'
 export default function LandingView({ carouselImages, onNavigateLogin }) {
   return (
     <div>
-      <section id="inicio" className="relative pt-12 pb-20 md:pt-24 md:pb-32 bg-gradient-to-b from-sky-50 via-white to-white overflow-hidden">
+      <section id="inicio" className="relative pt-8 pb-16 md:pt-24 md:pb-32 bg-gradient-to-b from-sky-50 via-white to-white overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center gap-12 relative z-10">
           <div className="md:w-1/2 space-y-6 text-center md:text-left">
             <div className="inline-flex bg-white text-sky-500 font-semibold px-4 py-1.5 rounded-full shadow-sm text-sm border border-sky-100 items-center gap-2">
               <i className="fa-solid fa-wand-magic-sparkles"></i> Odontología Digital Avanzada
             </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 leading-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 leading-tight">
               Precisión digital en cada <span className="text-sky-500">Prótesis</span>
             </h1>
             <p className="text-lg text-slate-600 max-w-xl mx-auto md:mx-0 leading-relaxed">

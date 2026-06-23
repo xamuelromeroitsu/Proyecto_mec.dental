@@ -27,7 +27,7 @@ export default function LoginView({ onLoginSuccess }) {
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center px-4 bg-slate-50">
-      <div className="bg-white rounded-3xl p-8 shadow-xl shadow-slate-100 border border-slate-100 w-full max-w-md">
+      <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl shadow-slate-100 border border-slate-100 w-full max-w-md">
         <div className="text-center mb-8 space-y-2">
           <div className="w-12 h-12 bg-sky-50 rounded-full flex items-center justify-center text-sky-500 text-xl mx-auto border border-sky-100">
             <i className="fa-solid fa-lock"></i>
@@ -62,7 +62,7 @@ export default function LoginView({ onLoginSuccess }) {
           <div className="space-y-1">
             <label className="block text-xs font-bold text-slate-700 uppercase">Contraseña Cifrada (SHA-256)</label>
             <div className="relative">
-              <i className="fa-solid fa-key absolute left-3 top-2.5 text-slate-400 text-sm"></i>
+              <i className="fa-solid fa-key absolute left-3 top-3.5 text-slate-400 text-sm"></i>
               <input
                 type="password"
                 value={password}
