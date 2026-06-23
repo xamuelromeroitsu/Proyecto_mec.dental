@@ -41,7 +41,7 @@ export default function App() {
         onLogout={handleLogout}
       />
 
-      <main className="pt-20">
+      <main className="pt-28">
         {currentView === 'landing' && (
           <LandingView
             carouselImages={carouselImages}

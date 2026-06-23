@@ -2,14 +2,12 @@ export default function Header({ currentView, authData, onNavigate, onLogout }) 
   return (
     <header className="fixed w-full bg-white/95 backdrop-blur-md shadow-sm z-40 transition-all">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-20 items-center">
-          <div className="flex-shrink-0 flex items-center gap-1.5 sm:gap-2 cursor-pointer" onClick={() => onNavigate('landing')}>
-            <i className="fa-solid fa-tooth text-2xl sm:text-3xl text-sky-500"></i>
-            <span className="font-bold text-xl sm:text-2xl text-slate-900 tracking-tight">Nova<span className="text-sky-500">Dent</span></span>
-            <span className="bg-sky-50 text-sky-600 text-[10px] sm:text-xs font-semibold px-2 sm:px-2.5 py-0.5 rounded border border-sky-100 ml-0.5 sm:ml-1">LAB</span>
+        <div className="flex justify-between h-28 items-center">
+          <div className="flex-shrink-0 flex items-center cursor-pointer mr-4 sm:mr-8" onClick={() => onNavigate('landing')}>
+            <img src="/logo.jpeg" alt="NovaDent LAB" className="h-16 sm:h-20 w-auto object-contain" />
           </div>
 
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4 sm:gap-6">
             {currentView === 'landing' ? (
               <>
                 <a href="#inicio" className="hidden md:inline-block text-slate-600 hover:text-sky-500 transition-colors font-medium">Inicio</a>
