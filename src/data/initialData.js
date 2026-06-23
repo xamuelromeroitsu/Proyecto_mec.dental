@@ -1,28 +1,20 @@
 export const INITIAL_CAROUSEL_IMAGES = [
-  {
-    id: 1,
-    url: "https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?auto=format&fit=crop&w=1200&q=80",
-    title: "Rehabilitación Oral Completa de Zirconio",
-    author: "Dra. Sofía Mendoza - Clínica Dental Esthetic",
-    description:
-      "Paciente de 45 años. Prótesis fija de 1Unit de arco completo sobre implantes con ajuste pasivo perfecto y textura natural.",
-  },
-  {
-    id: 2,
-    url: "https://images.unsplash.com/photo-1598256989800-fe5f95da9787?auto=format&fit=crop&w=1200&q=80",
-    title: "Corona Monolítica CAD/CAM E-Max",
-    author: "Dr. Roberto Silva - Odontología Digital",
-    description:
-      "Corona en sector posterior (pieza 16) diseñada digitalmente y fresada con precisión micrométrica para una oclusión ideal.",
-  },
-  {
-    id: 3,
-    url: "https://images.unsplash.com/photo-1579684389782-64d84b5e905d?auto=format&fit=crop&w=1200&q=80",
-    title: "Carillas de Disilicato de Litio Premium",
-    author: "Dra. Carolina Ortega - Centro Odontológico Avanzado",
-    description:
-      "Transformación de sonrisa mediante 6 carillas ultrafinas de alta traslucidez y mapeo de color personalizado.",
-  },
+  { id: 1, url: "/carrusel/1.jpeg", title: "Rehabilitación Oral Completa de Zirconio", author: "Dra. Sofía Mendoza - Clínica Dental Esthetic", description: "Paciente de 45 años. Prótesis fija de arco completo sobre implantes con ajuste pasivo perfecto y textura natural." },
+  { id: 2, url: "/carrusel/2.jpeg", title: "Corona Monolítica CAD/CAM E-Max", author: "Dr. Roberto Silva - Odontología Digital", description: "Corona en sector posterior diseñada digitalmente y fresada con precisión micrométrica para una oclusión ideal." },
+  { id: 3, url: "/carrusel/3.jpeg", title: "Carillas de Disilicato de Litio Premium", author: "Dra. Carolina Ortega - Centro Odontológico Avanzado", description: "Transformación de sonrisa mediante 6 carillas ultrafinas de alta traslucidez y mapeo de color personalizado." },
+  { id: 4, url: "/carrusel/4.jpeg", title: "Prótesis Parcial Removible Flexible", author: "Dr. Andrés Vega - Clínica Dental Esthetic", description: "Estructura flexible de nylon biocompatible con ajuste marginal preciso y alta estética." },
+  { id: 5, url: "/carrusel/5.jpeg", title: "Puente Anterior de Zirconio", author: "Dra. Laura Méndez - Odontología Digital", description: "Puente de 3 unidades en sector anterior con enmascaramiento cervical y translucidez natural." },
+  { id: 6, url: "/carrusel/6.jpeg", title: "Rehabilitación de Arcada Completa", author: "Dr. Ricardo Paz - Centro Odontológico Avanzado", description: "Rehabilitación multimodal con coronas sobre implantes y dientes naturales." },
+  { id: 7, url: "/carrusel/7.jpeg", title: "Incrustación Inlay/Onlay E-Max", author: "Dra. Patricia Ríos - Clínica Dental Esthetic", description: "Incrustación estética de disilicato de litio con ajuste periférico y punto de contacto óptimo." },
+  { id: 8, url: "/carrusel/8.jpeg", title: "Férula Oclusal de Descarga", author: "Dr. Hugo Paredes - Odontología Digital", description: "Férula rígida de resina acrílica transparente con estabilización oclusal céntrica." },
+  { id: 9, url: "/carrusel/9.jpeg", title: "Corona Metálica Colada", author: "Dra. Carmen Zúñiga - Clínica Dental Esthetic", description: "Corona completa de aleación cromo-cobalto con ajuste cervical y oclusión balanceada." },
+  { id: 10, url: "/carrusel/10.jpeg", title: "Carillas Parciales de Zirconio", author: "Dr. Luis Hidalgo - Centro Odontológico Avanzado", description: "Carillas parciales en sector estético con estratificación de cerámas de alta gama." },
+  { id: 11, url: "/carrusel/11.jpeg", title: "Prótesis Híbrida sobre Implantes", author: "Dra. Marcela Farías - Odontología Digital", description: "Estructura híbrida de zirconio fresada sobre múltiples implantes en arcada completa." },
+  { id: 12, url: "/carrusel/12.jpeg", title: "Corona Temporal de PMMA", author: "Dr. Jorge Delgado - Clínica Dental Esthetic", description: "Corona provisional de resina PMMA con contorno y emergencia diseñados digitalmente." },
+  { id: 13, url: "/carrusel/13.jpeg", title: "Pilar Personalizado de Titanio", author: "Dra. Silvia Aguirre - Centro Odontológico Avanzado", description: "Pilar cad/cam de titanio atornillado a implante con plataforma protésica personalizada." },
+  { id: 14, url: "/carrusel/14.jpeg", title: "Prótesis Esquelética Metálica", author: "Dr. Mario Briceño - Odontología Digital", description: "Estructura de cromo-cobalto con retenedores y apoyos oclusales de alta rigidez." },
+  { id: 15, url: "/carrusel/15.jpeg", title: "Mantenedor de Espacio Estético", author: "Dra. Adriana Soto - Clínica Dental Esthetic", description: "Mantenedor de espacio con corona acrílica e inserto metálico de sujeción intraoral." },
+  { id: 16, url: "/carrusel/16.jpeg", title: "Placa Hawley de Expansión Rápida", author: "Dr. Fernando Arias - Odontología Digital", description: "Aparato ortopédico de expansión palatina con tornillo activo y arcos calibrados de 0.8 mm." },
 ]
 
 export const INITIAL_ORDERS = [

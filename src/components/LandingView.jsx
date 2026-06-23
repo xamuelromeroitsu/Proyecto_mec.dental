@@ -26,9 +26,9 @@ export default function LandingView({ carouselImages, onNavigateLogin }) {
             </div>
           </div>
           <div className="md:w-1/2 relative flex justify-center">
-            <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white w-full max-w-lg aspect-[4/3] bg-sky-100">
+            <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white w-full max-w-lg aspect-[3/4] bg-sky-100">
               <img
-                src="https://images.unsplash.com/photo-1606811841689-23dfddce3e95?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                src="/hero.jpeg"
                 alt="Laboratorio Tecnológico Dental"
                 className="w-full h-full object-cover"
               />
