@@ -1,5 +1,6 @@
 import InteractiveCarousel from './InteractiveCarousel'
 import ServiceCard from './ServiceCard'
+import Testimonials from './Testimonials'
 
 export default function LandingView({ carouselImages, onNavigateLogin }) {
   return (
@@ -22,6 +23,40 @@ export default function LandingView({ carouselImages, onNavigateLogin }) {
               </button>
               <a href="#casos" className="bg-white text-sky-500 border border-sky-200 px-8 py-4 rounded-full font-bold hover:bg-sky-50 transition-all shadow-sm flex items-center justify-center gap-2">
                 <i className="fa-solid fa-images"></i> Ver Casos de Clientes
+              </a>
+            </div>
+
+            <style>{`
+              @keyframes float {
+                0%, 100% { transform: translateY(0); }
+                50% { transform: translateY(-6px); }
+              }
+              @keyframes pulse-ring {
+                0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+                70% { box-shadow: 0 0 0 12px rgba(59, 130, 246, 0); }
+                100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+              }
+              .social-btn {
+                animation: float 3s ease-in-out infinite;
+              }
+              .social-btn:hover {
+                animation: pulse-ring 1s ease-out infinite;
+              }
+            `}</style>
+            <div className="flex items-center gap-4 pt-6 justify-center md:justify-start">
+              <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Síguenos</span>
+              <div className="h-px w-8 bg-slate-200"></div>
+              <a href="#" target="_blank" rel="noopener noreferrer" className="social-btn w-11 h-11 bg-green-500 hover:bg-green-600 text-white rounded-xl flex items-center justify-center text-xl shadow-lg hover:shadow-green-500/30 hover:-translate-y-1 transition-all" style={{ animationDelay: '0s' }}>
+                <i className="fa-brands fa-whatsapp"></i>
+              </a>
+              <a href="#" target="_blank" rel="noopener noreferrer" className="social-btn w-11 h-11 bg-blue-600 hover:bg-blue-700 text-white rounded-xl flex items-center justify-center text-xl shadow-lg hover:shadow-blue-600/30 hover:-translate-y-1 transition-all" style={{ animationDelay: '0.15s' }}>
+                <i className="fa-brands fa-facebook-f"></i>
+              </a>
+              <a href="https://vt.tiktok.com/ZSCvbf3MY/" target="_blank" rel="noopener noreferrer" className="social-btn w-11 h-11 bg-black hover:bg-slate-800 text-white rounded-xl flex items-center justify-center text-xl shadow-lg hover:shadow-black/30 hover:-translate-y-1 transition-all" style={{ animationDelay: '0.3s' }}>
+                <i className="fa-brands fa-tiktok"></i>
+              </a>
+              <a href="#" target="_blank" rel="noopener noreferrer" className="social-btn w-11 h-11 bg-gradient-to-tr from-purple-600 via-pink-500 to-orange-400 hover:opacity-90 text-white rounded-xl flex items-center justify-center text-xl shadow-lg hover:shadow-pink-500/30 hover:-translate-y-1 transition-all" style={{ animationDelay: '0.45s' }}>
+                <i className="fa-brands fa-instagram"></i>
               </a>
             </div>
           </div>
@@ -93,6 +128,8 @@ export default function LandingView({ carouselImages, onNavigateLogin }) {
         </div>
       </section>
 
+      <Testimonials />
+
       <section id="nosotros" className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-gradient-to-r from-sky-500 to-sky-600 rounded-3xl p-8 md:p-16 text-white shadow-xl shadow-sky-100 flex flex-col lg:flex-row items-center justify-between gap-10">
@@ -126,6 +163,51 @@ export default function LandingView({ carouselImages, onNavigateLogin }) {
               </button>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section id="contacto" className="py-20 bg-slate-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <span className="text-sky-500 font-bold uppercase text-xs tracking-wider">Contacto</span>
+          <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mt-1 mb-4">Contáctanos</h2>
+          <p className="text-slate-500 max-w-xl mx-auto mb-10">
+            Estamos listos para ser tu aliado en mecánica dental. Escríbenos por cualquiera de nuestros canales.
+          </p>
+          <div className="flex justify-center gap-6">
+            <a
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-16 h-16 bg-green-500 hover:bg-green-600 text-white rounded-2xl flex items-center justify-center text-3xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all"
+            >
+              <i className="fa-brands fa-whatsapp"></i>
+            </a>
+            <a
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-16 h-16 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl flex items-center justify-center text-3xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all"
+            >
+              <i className="fa-brands fa-facebook-f"></i>
+            </a>
+            <a
+              href="https://vt.tiktok.com/ZSCvbf3MY/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-16 h-16 bg-black hover:bg-slate-800 text-white rounded-2xl flex items-center justify-center text-3xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all"
+            >
+              <i className="fa-brands fa-tiktok"></i>
+            </a>
+            <a
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-16 h-16 bg-gradient-to-tr from-purple-600 via-pink-500 to-orange-400 hover:opacity-90 text-white rounded-2xl flex items-center justify-center text-3xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all"
+            >
+              <i className="fa-brands fa-instagram"></i>
+            </a>
+          </div>
+          <p className="text-xs text-slate-400 mt-8">Haz clic en cualquier icono para contactarnos directamente</p>
         </div>
       </section>
     </div>

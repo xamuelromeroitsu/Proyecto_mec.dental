@@ -3,6 +3,7 @@ import Header from './components/Header'
 import LandingView from './components/LandingView'
 import LoginView from './components/LoginView'
 import DashboardView from './components/DashboardView'
+
 import { INITIAL_CAROUSEL_IMAGES, INITIAL_ORDERS } from './data/initialData'
 
 export default function App() {
