@@ -5,7 +5,7 @@ import ServiceCard from './ServiceCard'
 export default function LandingView({ carouselImages, onNavigateLogin }) {
   return (
     <div>
-      <section id="inicio" className="relative pt-8 pb-16 md:pt-24 md:pb-32 bg-gradient-to-b from-sky-50 via-white to-white overflow-hidden">
+      <section id="inicio" className="relative min-h-[calc(100vh-5rem)] md:min-h-[calc(100vh-7rem)] flex items-center bg-gradient-to-b from-sky-50 via-white to-white overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center gap-12 relative z-10">
           <div className="md:w-1/2 space-y-6 text-center md:text-left">
             <div className="inline-flex bg-white text-sky-500 font-semibold px-4 py-1.5 rounded-full shadow-sm text-sm border border-sky-100 items-center gap-2">
@@ -72,10 +72,10 @@ export default function LandingView({ carouselImages, onNavigateLogin }) {
         </div>
       </section>
 
-      <section id="casos" className="py-16 bg-white border-y border-slate-100">
+      <section id="casos" className="scroll-mt-20 md:scroll-mt-28 py-16 bg-white border-y border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
-            <div>
+    <div className="overflow-x-hidden">
               <span className="text-sky-500 font-bold uppercase text-xs tracking-wider">Casos de Éxito Reales</span>
               <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mt-1">Galería de Trabajos Enviados</h2>
               <p className="text-slate-500 mt-2 max-w-2xl">La precisión oclusal y la alta estética se unen en boca de los pacientes.</p>
@@ -85,7 +85,7 @@ export default function LandingView({ carouselImages, onNavigateLogin }) {
         </div>
       </section>
 
-      <section id="servicios" className="py-20 bg-slate-50">
+      <section id="servicios" className="scroll-mt-20 md:scroll-mt-28 py-20 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <span className="text-sky-500 font-bold uppercase text-xs tracking-wider">Especialidades de Manufactura</span>

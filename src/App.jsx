@@ -34,7 +34,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 font-sans antialiased selection:bg-sky-200">
+    <div className="min-h-screen w-full bg-slate-50 text-slate-800 font-sans antialiased selection:bg-sky-200">
       <Header
         currentView={currentView}
         authData={authData}
@@ -42,7 +42,7 @@ export default function App() {
         onLogout={handleLogout}
       />
 
-      <main className="pt-28">
+      <main className="pt-20 md:pt-28">
         {currentView === 'landing' && (
           <LandingView
             carouselImages={carouselImages}

@@ -81,20 +81,22 @@
     </style>
   </head>
   <body class="m-0 bg-[#f9f9f9]">
-    <div id="root" class="flex justify-center items-center min-h-screen w-full" style="font-family: 'Inter', sans-serif;">
-      <div class="loader px-4">
-        <div class="characterWrapper w-[120px] h-[120px] xs:w-[150px] xs:h-[140px]">
-          <div class="muelaBody w-[80px] xs:w-[100px]">
-            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto">
-              <path d="M55 55 C 40 20, 160 20, 145 55 C 160 70, 155 120, 150 140 C 130 160, 110 140, 100 140 C 90 140, 70 160, 50 140 C 45 120, 40 70, 55 55 Z" fill="#ffffff" stroke="#1a2b48" stroke-width="8" stroke-linejoin="round"/>
-              <ellipse cx="80" cy="95" rx="9" ry="14" fill="#1a2b48" />
-              <ellipse cx="120" cy="95" rx="9" ry="14" fill="#1a2b48" />
-              <path d="M90 120 Q 100 132 110 120" stroke="#1a2b48" stroke-width="6" fill="none" stroke-linecap="round" />
-            </svg>
+    <div id="root" style="font-family: 'Inter', sans-serif;">
+      <div class="flex justify-center items-center min-h-screen w-full">
+        <div class="loader px-4">
+          <div class="characterWrapper w-[120px] h-[120px] xs:w-[150px] xs:h-[140px]">
+            <div class="muelaBody w-[80px] xs:w-[100px]">
+              <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto">
+                <path d="M55 55 C 40 20, 160 20, 145 55 C 160 70, 155 120, 150 140 C 130 160, 110 140, 100 140 C 90 140, 70 160, 50 140 C 45 120, 40 70, 55 55 Z" fill="#ffffff" stroke="#1a2b48" stroke-width="8" stroke-linejoin="round"/>
+                <ellipse cx="80" cy="95" rx="9" ry="14" fill="#1a2b48" />
+                <ellipse cx="120" cy="95" rx="9" ry="14" fill="#1a2b48" />
+                <path d="M90 120 Q 100 132 110 120" stroke="#1a2b48" stroke-width="6" fill="none" stroke-linecap="round" />
+              </svg>
+            </div>
+            <div class="road"></div>
           </div>
-          <div class="road"></div>
+          <p class="text-[#1a2b48] font-bold text-lg xs:text-xl tracking-wider uppercase animate-pulse">Cargando...</p>
         </div>
-        <p class="text-[#1a2b48] font-bold text-lg xs:text-xl tracking-wider uppercase animate-pulse">Cargando...</p>
       </div>
     </div>
     <script type="module" src="/src/main.jsx"></script>
