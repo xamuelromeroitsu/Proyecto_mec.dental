@@ -4,7 +4,7 @@ export default function Header({ currentView, authData, onNavigate, onLogout }) 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-28 items-center">
           <div className="flex-shrink-0 flex items-center cursor-pointer mr-4 sm:mr-8" onClick={() => onNavigate('landing')}>
-            <img src="/logo.jpeg" alt="NovaDent LAB" className="h-16 sm:h-20 w-auto object-contain" />
+            <img src="/logo.png" alt="NovaDent LAB" className="h-16 sm:h-20 w-auto object-contain" />
           </div>
 
           <div className="flex items-center gap-4 sm:gap-6">

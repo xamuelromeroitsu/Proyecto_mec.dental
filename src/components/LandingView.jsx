@@ -1,6 +1,6 @@
 import InteractiveCarousel from './InteractiveCarousel'
 import ServiceCard from './ServiceCard'
-import Testimonials from './Testimonials'
+
 
 export default function LandingView({ carouselImages, onNavigateLogin }) {
   return (
@@ -127,8 +127,6 @@ export default function LandingView({ carouselImages, onNavigateLogin }) {
           </div>
         </div>
       </section>
-
-      <Testimonials />
 
       <section id="nosotros" className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
