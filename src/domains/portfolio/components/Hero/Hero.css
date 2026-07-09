@@ -2,16 +2,17 @@
 
 .hero {
   position: relative;
-  min-height: calc(100vh - var(--header-height));
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  padding-top: var(--space-8);
   background: linear-gradient(to bottom, var(--color-primary-light), var(--color-white), var(--color-white));
-  overflow: hidden;
 }
 
 @media (min-width: 768px) {
   .hero {
     min-height: calc(100vh - var(--header-height-md));
+    align-items: center;
+    padding-top: 0;
   }
 }
 
@@ -189,9 +190,16 @@
 .hero-social {
   display: flex;
   align-items: center;
-  gap: var(--space-4);
+  gap: var(--space-3);
   padding-top: var(--space-6);
   justify-content: center;
+  flex-wrap: wrap;
+}
+
+@media (min-width: 640px) {
+  .hero-social {
+    gap: var(--space-4);
+  }
 }
 
 @media (min-width: 768px) {
@@ -206,12 +214,20 @@
   color: var(--color-slate-400);
   text-transform: uppercase;
   letter-spacing: var(--tracking-wider);
+  white-space: nowrap;
 }
 
 .hero-social-divider {
   height: 1px;
-  width: var(--space-8);
+  width: var(--space-4);
   background-color: var(--color-slate-200);
+  flex-shrink: 0;
+}
+
+@media (min-width: 640px) {
+  .hero-social-divider {
+    width: var(--space-8);
+  }
 }
 
 @keyframes float {
@@ -226,17 +242,27 @@
 }
 
 .hero-social-btn {
-  width: 2.75rem;
-  height: 2.75rem;
+  width: 2.25rem;
+  height: 2.25rem;
   color: var(--color-white);
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-lg);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: var(--text-xl);
-  box-shadow: var(--shadow-lg);
+  font-size: var(--text-base);
+  box-shadow: var(--shadow-md);
   transition: all var(--transition-base);
   animation: float 3s ease-in-out infinite;
+}
+
+@media (min-width: 640px) {
+  .hero-social-btn {
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: var(--radius-xl);
+    font-size: var(--text-xl);
+    box-shadow: var(--shadow-lg);
+  }
 }
 
 .hero-social-btn:hover {
