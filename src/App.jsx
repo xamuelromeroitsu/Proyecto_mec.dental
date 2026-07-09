@@ -51,7 +51,7 @@ export default function App() {
         )}
         {currentView === 'login' && <LoginView onLoginSuccess={handleLogin} />}
         {currentView === 'dashboard' && (
-          <DashboardView orders={orders} onAddOrder={handleAddOrder} />
+          <DashboardView orders={orders} onAddOrder={handleAddOrder} authData={authData} />
         )}
       </main>
     </div>

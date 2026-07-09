@@ -1,46 +1,85 @@
 import { useState } from 'react'
-import OrderList from '../OrderList/OrderList'
+import OrderFeed from '../OrderFeed/OrderFeed'
 import NewOrderForm from '../NewOrderForm/NewOrderForm'
 import './DashboardView.css'
 
-export default function DashboardView({ orders, onAddOrder }) {
-  const [view, setView] = useState('list')
+const STORIES = [
+  { key: 'all', label: 'Todos', icon: 'fa-layer-group' },
+  { key: 'Prótesis Fija', label: 'Fija', icon: 'fa-teeth' },
+  { key: 'Prótesis Removible', label: 'Removible', icon: 'fa-teeth-open' },
+  { key: 'Ortodoncia / Alineadores', label: 'Ortodoncia', icon: 'fa-bezier-curve' },
+]
+
+export default function DashboardView({ orders, onAddOrder, authData }) {
+  const [view, setView] = useState('feed')
+  const [activeFilter, setActiveFilter] = useState('all')
+
+  const filteredOrders = activeFilter === 'all'
+    ? orders
+    : orders.filter(o => o.tipo === activeFilter)
+
+  const completedCount = orders.filter(o => o.estado === 'Completado').length
+  const inProgressCount = orders.filter(o => o.estado === 'En Proceso').length
 
   return (
     <div className="dashboard">
-      <div className="dashboard-header">
-        <div>
-          <h2 className="dashboard-title">Área Privada de Clínicas</h2>
-          <p className="dashboard-subtitle">
-            Gestione solicitudes de trabajo, envíe archivos STL digitales y
-            rastree el estado en tiempo real.
-          </p>
-        </div>
-        <div className="dashboard-tabs">
-          <button
-            onClick={() => setView('list')}
-            className={`dashboard-tab ${view === 'list' ? 'dashboard-tab--active' : 'dashboard-tab--inactive'}`}
-          >
-            <i className="fa-solid fa-clipboard-list"></i>
-            <span className="dashboard-tab-label">Historial de Órdenes</span>
-            <span className="dashboard-tab-short">Órdenes</span>
-          </button>
-          <button
-            onClick={() => setView('new-order')}
-            className={`dashboard-tab ${view === 'new-order' ? 'dashboard-tab--active' : 'dashboard-tab--inactive'}`}
-          >
-            <i className="fa-solid fa-file-invoice"></i>
-            <span className="dashboard-tab-label">Nueva Orden</span>
-            <span className="dashboard-tab-short">Crear</span>
-          </button>
+      <div className="profile">
+        <div className="profile-cover"></div>
+        <div className="profile-info">
+          <div className="profile-avatar">
+            <i className="fa-solid fa-user-md"></i>
+          </div>
+          <div className="profile-data">
+            <h2 className="profile-name">{authData?.user?.name || 'Dr. Alejandro Martínez'}</h2>
+            <p className="profile-clinic">{authData?.user?.clinic || 'Clínica Dental Esthetic'}</p>
+            <p className="profile-specialty">Odontología General · Estética Dental</p>
+          </div>
+          <div className="profile-stats">
+            <div className="profile-stat">
+              <span className="profile-stat-value">{orders.length}</span>
+              <span className="profile-stat-label">Órdenes</span>
+            </div>
+            <div className="profile-stat">
+              <span className="profile-stat-value">{inProgressCount}</span>
+              <span className="profile-stat-label">En curso</span>
+            </div>
+            <div className="profile-stat">
+              <span className="profile-stat-value">{completedCount}</span>
+              <span className="profile-stat-label">Completadas</span>
+            </div>
+          </div>
         </div>
       </div>
 
-      {view === 'list' && <OrderList orders={orders} />}
+      <div className="dashboard-stories">
+        {STORIES.map(s => (
+          <button
+            key={s.key}
+            onClick={() => setActiveFilter(s.key)}
+            className={`story-btn ${activeFilter === s.key ? 'story-btn--active' : ''}`}
+          >
+            <div className="story-circle">
+              <i className={`fa-solid ${s.icon}`}></i>
+            </div>
+            <span className="story-label">{s.label}</span>
+          </button>
+        ))}
+      </div>
+
+      {view === 'feed' && (
+        <>
+          <OrderFeed orders={filteredOrders} />
+
+          <button onClick={() => setView('new-order')} className="fab">
+            <i className="fa-solid fa-plus"></i>
+          </button>
+        </>
+      )}
+
       {view === 'new-order' && (
         <NewOrderForm
-          onAddOrder={onAddOrder}
-          onCancel={() => setView('list')}
+          onAddOrder={(o) => { onAddOrder(o); setView('feed') }}
+          onCancel={() => setView('feed')}
         />
       )}
     </div>

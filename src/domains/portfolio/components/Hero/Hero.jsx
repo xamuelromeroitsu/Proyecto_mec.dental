@@ -21,13 +21,9 @@ export default function Hero({ onNavigateLogin }) {
 
           <div className="hero-actions">
             <button onClick={onNavigateLogin} className="hero-btn-primary">
-              <i className="fa-solid fa-laptop-medical"></i>
-              Ingresar al Portal Privado
+              <i className="fa-solid fa-calendar-check"></i>
+              Agendar Cita
             </button>
-            <a href="#casos" className="hero-btn-secondary">
-              <i className="fa-solid fa-images"></i>
-              Ver Casos de Clientes
-            </a>
           </div>
 
           <div className="hero-social">
