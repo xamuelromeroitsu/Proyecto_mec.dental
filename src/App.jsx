@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
-import Header from './components/Header'
-import LandingView from './components/LandingView'
-import LoginView from './components/LoginView'
-import DashboardView from './components/DashboardView'
-
+import Header from './shared/Header/Header'
+import Presentation from './domains/portfolio/components/Presentation/Presentation'
+import LoginView from './domains/auth/LoginView/LoginView'
+import DashboardView from './domains/dashboard/DashboardView/DashboardView'
 import { INITIAL_CAROUSEL_IMAGES, INITIAL_ORDERS } from './data/initialData'
+import './styles/base.css'
 
 export default function App() {
   const [currentView, setCurrentView] = useState('landing')
@@ -34,7 +34,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen w-full bg-slate-50 text-slate-800 font-sans antialiased selection:bg-sky-200">
+    <div className="app">
       <Header
         currentView={currentView}
         authData={authData}
@@ -42,15 +42,17 @@ export default function App() {
         onLogout={handleLogout}
       />
 
-      <main className="pt-20 md:pt-28">
+      <main className="main-content">
         {currentView === 'landing' && (
-          <LandingView
+          <Presentation
             carouselImages={carouselImages}
             onNavigateLogin={() => setCurrentView('login')}
           />
         )}
         {currentView === 'login' && <LoginView onLoginSuccess={handleLogin} />}
-        {currentView === 'dashboard' && <DashboardView orders={orders} onAddOrder={handleAddOrder} />}
+        {currentView === 'dashboard' && (
+          <DashboardView orders={orders} onAddOrder={handleAddOrder} />
+        )}
       </main>
     </div>
   )

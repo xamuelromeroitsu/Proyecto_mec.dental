@@ -1,0 +1,52 @@
+@import '../../../../styles/variables.css';
+
+.gallery {
+  scroll-margin-top: var(--header-height);
+  padding: var(--space-16) 0;
+  background-color: var(--color-white);
+  border-top: 1px solid var(--color-slate-100);
+  border-bottom: 1px solid var(--color-slate-100);
+}
+
+@media (min-width: 768px) {
+  .gallery {
+    scroll-margin-top: var(--header-height-md);
+  }
+}
+
+.gallery-header {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: var(--space-10);
+}
+
+@media (min-width: 768px) {
+  .gallery-header {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+}
+
+.gallery-header-text {
+  overflow-x: hidden;
+}
+
+.gallery-title {
+  font-size: var(--text-3xl);
+  font-weight: var(--font-extrabold);
+  color: var(--color-slate-900);
+  margin-top: var(--space-1);
+}
+
+@media (min-width: 768px) {
+  .gallery-title {
+    font-size: var(--text-4xl);
+  }
+}
+
+.gallery-subtitle {
+  color: var(--color-slate-500);
+  margin-top: var(--space-2);
+  max-width: 42rem;
+}

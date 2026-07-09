@@ -1,0 +1,106 @@
+@import '../../../styles/variables.css';
+
+.odontograma {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  background-color: var(--color-slate-50);
+  padding: var(--space-6);
+  border-radius: var(--radius-2xl);
+  border: 1px solid var(--color-slate-100);
+}
+
+.odontograma-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.odontograma-label {
+  font-size: var(--text-xs);
+  font-weight: var(--font-bold);
+  color: var(--color-slate-700);
+  text-transform: uppercase;
+}
+
+.odontograma-hint {
+  font-size: var(--text-xs);
+  color: var(--color-slate-400);
+  margin-top: var(--space-1);
+}
+
+.odontograma-clear {
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  color: var(--color-danger);
+  transition: color var(--transition-base);
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.odontograma-clear:hover {
+  color: var(--color-danger-hover);
+}
+
+.odontograma-arcade {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-1_5);
+  min-width: 500px;
+  padding-top: var(--space-4);
+}
+
+@media (min-width: 768px) {
+  .odontograma-arcade {
+    gap: var(--space-3);
+  }
+}
+
+.odontograma-arcades {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  overflow-x: auto;
+}
+
+.odontograma-tooth {
+  width: 2.25rem;
+  height: 2.75rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-slate-200);
+  font-family: var(--font-mono);
+  font-weight: var(--font-bold);
+  font-size: var(--text-xs);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.375rem 0;
+  transition: all var(--transition-base);
+  background-color: var(--color-white);
+  color: var(--color-slate-600);
+  cursor: pointer;
+}
+
+.odontograma-tooth:hover {
+  border-color: var(--color-primary-lighter);
+}
+
+.odontograma-tooth--selected {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border-color: var(--color-primary-hover);
+  box-shadow: var(--shadow-md);
+  transform: scale(1.05);
+}
+
+.odontograma-tooth-number {
+  font-size: 9px;
+}
+
+.odontograma-tooth-icon {
+  font-size: 10px;
+}

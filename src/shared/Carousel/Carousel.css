@@ -1,0 +1,199 @@
+@import '../../styles/variables.css';
+
+.carousel-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--space-16) 0;
+  background: linear-gradient(to bottom, rgba(248, 250, 252, 0.5), var(--color-white));
+}
+
+.carousel-empty {
+  background-color: var(--color-slate-50);
+  border: 2px dashed var(--color-slate-200);
+  border-radius: var(--radius-3xl);
+  padding: var(--space-12);
+  text-align: center;
+  color: var(--color-slate-400);
+}
+
+.carousel-empty-icon {
+  font-size: var(--text-4xl);
+  margin-bottom: var(--space-3);
+  color: var(--color-slate-300);
+}
+
+.carousel-empty-text {
+  font-weight: var(--font-semibold);
+}
+
+.carousel-stack {
+  position: relative;
+  width: 280px;
+  height: 380px;
+}
+
+.carousel-card {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.25), 0 5px 15px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  animation: stackSpin 10s infinite ease-in-out;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.carousel-card:hover {
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+}
+
+.carousel-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.carousel-card .carousel-glow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.5), transparent 40%);
+}
+
+.carousel-card.s0 {
+  animation-delay: 0s;
+  z-index: 10;
+  filter: brightness(1);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35), 0 0 40px rgba(56, 189, 248, 0.15);
+}
+
+.carousel-card.s1 {
+  animation-delay: 2.5s;
+  z-index: 9;
+  filter: brightness(0.85);
+}
+
+.carousel-card.s2 {
+  animation-delay: 5s;
+  z-index: 8;
+  filter: brightness(0.7);
+}
+
+.carousel-card.s3 {
+  animation-delay: 7.5s;
+  z-index: 7;
+  filter: brightness(0.6);
+}
+
+@keyframes stackSpin {
+  0%, 15% {
+    transform: translateX(0) scale(1) rotate(0deg);
+    z-index: 10;
+    filter: brightness(1);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35), 0 0 40px rgba(56, 189, 248, 0.15);
+  }
+  25%, 40% {
+    transform: translateX(-140px) scale(0.85) rotate(-8deg);
+    z-index: 5;
+    filter: brightness(0.85);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  }
+  50%, 65% {
+    transform: translateX(0) scale(0.7) rotate(0deg);
+    z-index: 1;
+    filter: brightness(0.6);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+  75%, 90% {
+    transform: translateX(140px) scale(0.85) rotate(8deg);
+    z-index: 5;
+    filter: brightness(0.85);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  }
+  100% {
+    transform: translateX(0) scale(1) rotate(0deg);
+    z-index: 10;
+    filter: brightness(1);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35), 0 0 40px rgba(56, 189, 248, 0.15);
+  }
+}
+
+@media (max-width: 640px) {
+  .carousel-stack {
+    width: 200px;
+    height: 280px;
+  }
+
+  @keyframes stackSpin {
+    0%, 15% {
+      transform: translateX(0) scale(1) rotate(0deg);
+      z-index: 10;
+      filter: brightness(1);
+    }
+    25%, 40% {
+      transform: translateX(-90px) scale(0.85) rotate(-6deg);
+      z-index: 5;
+      filter: brightness(0.85);
+    }
+    50%, 65% {
+      transform: translateX(0) scale(0.7) rotate(0deg);
+      z-index: 1;
+      filter: brightness(0.6);
+    }
+    75%, 90% {
+      transform: translateX(90px) scale(0.85) rotate(6deg);
+      z-index: 5;
+      filter: brightness(0.85);
+    }
+    100% {
+      transform: translateX(0) scale(1) rotate(0deg);
+      z-index: 10;
+      filter: brightness(1);
+    }
+  }
+}
+
+/* Lightbox */
+.carousel-lightbox {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+.carousel-lightbox-close {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--radius-full);
+  background-color: rgba(255, 255, 255, 0.2);
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color var(--transition-base);
+  z-index: 10;
+}
+
+.carousel-lightbox-close:hover {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+.carousel-lightbox-close i {
+  font-size: var(--text-xl);
+}
+
+.carousel-lightbox img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  padding: var(--space-4);
+}

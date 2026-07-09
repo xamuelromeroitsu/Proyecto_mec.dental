@@ -1,0 +1,92 @@
+@import '../../../../styles/variables.css';
+
+.contact {
+  padding: var(--space-20) 0;
+  background-color: var(--color-slate-50);
+}
+
+.contact-header {
+  text-align: center;
+}
+
+.contact-title {
+  font-size: var(--text-3xl);
+  font-weight: var(--font-extrabold);
+  color: var(--color-slate-900);
+  margin-top: var(--space-1);
+  margin-bottom: var(--space-4);
+}
+
+@media (min-width: 768px) {
+  .contact-title {
+    font-size: var(--text-4xl);
+  }
+}
+
+.contact-description {
+  color: var(--color-slate-500);
+  max-width: 36rem;
+  margin: 0 auto var(--space-10);
+}
+
+.contact-links {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-6);
+}
+
+.contact-link {
+  width: 4rem;
+  height: 4rem;
+  color: var(--color-white);
+  border-radius: var(--radius-2xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-3xl);
+  box-shadow: var(--shadow-lg);
+  transition: all var(--transition-base);
+}
+
+.contact-link:hover {
+  box-shadow: var(--shadow-xl);
+  transform: translateY(-0.25rem);
+}
+
+.contact-link--whatsapp {
+  background-color: var(--color-whatsapp);
+}
+
+.contact-link--whatsapp:hover {
+  background-color: var(--color-whatsapp-hover);
+}
+
+.contact-link--facebook {
+  background-color: var(--color-facebook);
+}
+
+.contact-link--facebook:hover {
+  background-color: var(--color-facebook-hover);
+}
+
+.contact-link--tiktok {
+  background-color: var(--color-tiktok);
+}
+
+.contact-link--tiktok:hover {
+  background-color: var(--color-tiktok-hover);
+}
+
+.contact-link--instagram {
+  background: linear-gradient(to top right, #9333ea, #ec4899, #fb923c);
+}
+
+.contact-link--instagram:hover {
+  opacity: 0.9;
+}
+
+.contact-note {
+  font-size: var(--text-xs);
+  color: var(--color-slate-400);
+  margin-top: var(--space-8);
+}
