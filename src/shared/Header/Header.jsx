@@ -5,7 +5,7 @@ export default function Header({ currentView, authData, onNavigate, onLogout }) 
     <header className="header">
       <div className="header-inner">
         <div className="header-logo" onClick={() => onNavigate('landing')}>
-          <img src="/logo.png" alt="NovaDent LAB" />
+          <img src="/logo.png" alt="Kamila Lab" />
         </div>
 
         <nav className="header-nav">

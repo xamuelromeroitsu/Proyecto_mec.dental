@@ -6,7 +6,7 @@ export default function About({ onNavigateLogin }) {
       <div className="container">
         <div className="about-card">
           <div className="about-content">
-            <h3 className="about-title">¿Por qué NovaDent es el mejor aliado clínico?</h3>
+            <h3 className="about-title">¿Por qué Kamila Lab es el mejor aliado clínico?</h3>
             <p className="about-text">
               Ofrecemos una experiencia integral de manufactura. No somos solo un
               proveedor; trabajamos codo a codo con cada odontólogo para garantizar

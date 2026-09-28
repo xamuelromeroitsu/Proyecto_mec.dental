@@ -1,6 +1,6 @@
-# DentalConnect - Plataforma de Gestión para Laboratorios de Mecánica Dental
+# Kamila Lab - Plataforma de Gestión para Laboratorios de Mecánica Dental
 
-DentalConnect es una plataforma web fullstack B2B diseñada para digitalizar, optimizar y acelerar el flujo de trabajo entre clínicas odontológicas y laboratorios de mecánica dental. El sistema actúa como una landing page de alta conversión y un portal operativo que elimina la fricción en la solicitud, facturación y seguimiento de prótesis y dispositivos dentales.
+Kamila Lab es una plataforma web fullstack B2B diseñada para digitalizar, optimizar y acelerar el flujo de trabajo entre clínicas odontológicas y laboratorios de mecánica dental. El sistema actúa como una landing page de alta conversión y un portal operativo que elimina la fricción en la solicitud, facturación y seguimiento de prótesis y dispositivos dentales.
 
 ## 🚀 Propósito del Proyecto
 
@@ -29,7 +29,7 @@ El principal dolor de cabeza en el sector dental es la pérdida de tiempo en la 
 
 La plataforma está construida utilizando tecnologías modernas orientadas al rendimiento, escalabilidad y mantenibilidad bajo los principios de **Clean Architecture** y **SOLID**:
 
-* **Frontend:** React (Vite), TypeScript, Tailwind CSS.
-* **Backend:** Python (Flask) / Ruby (Roda) - *Arquitectura RESTful limpia y desacoplada*.
-* **Base de Datos:** PostgreSQL / MariaDB - *Esquema relacional sólido para la consistencia en el estado de las órdenes*.
+* **Frontend:** React (Vite), Tailwind CSS.
+* **Backend:** Node.js - *Arquitectura RESTful limpia y desacoplada*.
+* **Base de Datos:** PostgreSQL / Supabase - *Esquema relacional sólido para la consistencia en el estado de las órdenes*.
 * **Infraestructura y DevOps:** Contenedores (Docker / Podman), Git para control de versiones y despliegues optimizados.
