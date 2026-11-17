@@ -27,7 +27,7 @@ export default function Services() {
           />
           <ServiceCard
             icon="fa-laptop-medical"
-            title="Flujo Digital Completo CAD/CAM"
+            title="Flujo Digital Completo"
             desc="Recepción directa de archivos STL de escáner intraoral. Diseño digital (Exocad) e impresión 3D de alta precisión para modelos quirúrgicos."
           />
           <ServiceCard

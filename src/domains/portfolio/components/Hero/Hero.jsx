@@ -18,7 +18,7 @@ export default function Hero() {
 
           <p className="hero-description">
             Diseñamos el futuro de la mecánica dental. Aliados estratégicos de clínicas exigentes
-            mediante tecnología CAD/CAM de máxima exactitud clínica.
+            mediante diseño digital de máxima exactitud clínica.
           </p>
 
           <div className="hero-actions">
