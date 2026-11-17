@@ -1,18 +1,20 @@
 import './OrderFeed.css'
 
 const STATUS_CONFIG = {
-  'Completado': { icon: 'fa-circle-check', cls: 'card-status--completed' },
-  'En Proceso': { icon: 'fa-spinner', cls: 'card-status--progress' },
   'Recibido': { icon: 'fa-inbox', cls: 'card-status--received' },
+  'En Diseño': { icon: 'fa-pen-ruler', cls: 'card-status--progress' },
+  'En Fabricación': { icon: 'fa-spinner', cls: 'card-status--progress' },
+  'Entregado': { icon: 'fa-circle-check', cls: 'card-status--completed' },
+  'Cancelado': { icon: 'fa-ban', cls: 'card-status--completed' },
 }
 
 export default function OrderFeed({ orders }) {
   if (orders.length === 0) {
     return (
       <div className="feed-empty">
-        <div className="feed-empty-icon">
-          <i className="fa-solid fa-folder-open"></i>
-        </div>
+<div className="feed-empty-icon" data-testid="feed-empty-icon">
+        <i className="fa-solid fa-folder-open"></i>
+      </div>
         <p className="feed-empty-text">No hay órdenes que mostrar</p>
       </div>
     )

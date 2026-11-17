@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import Odontograma from '../Odontograma/Odontograma'
+import { createOrder } from '../../../services/orders'
 import './NewOrderForm.css'
 
 const VITA_SHADES = ['A1', 'A2', 'A3', 'A3.5', 'A4', 'B1', 'B2', 'B3', 'B4', 'C1', 'C2', 'C3', 'D2', 'D3', 'Transparente']
@@ -10,14 +11,17 @@ const MATERIAL_OPTIONS = {
   'Ortodoncia / Alineadores': ['Férula Essix (Retenedor)', 'Placa Hawley de Expansión', 'Placa de Ortodoncia Activa', 'Mantenedor de Espacio'],
 }
 
-export default function NewOrderForm({ onAddOrder, onCancel }) {
+export default function NewOrderForm({ onAddOrder, onCancel, clinica }) {
   const [paciente, setPaciente] = useState('')
   const [tipoTrabajo, setTipoTrabajo] = useState('Prótesis Fija')
   const [material, setMaterial] = useState('Zirconio Monolítico')
   const [color, setColor] = useState('A2 VITA')
   const [selectedTeeth, setSelectedTeeth] = useState([])
   const [attachments, setAttachments] = useState([])
+  const [files, setFiles] = useState([])
+  const [indicaciones, setIndicaciones] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState('')
 
   useEffect(() => {
     const available = MATERIAL_OPTIONS[tipoTrabajo]
@@ -33,43 +37,54 @@ export default function NewOrderForm({ onAddOrder, onCancel }) {
   }
 
   const handleFileUpload = (e) => {
-    const files = Array.from(e.target.files)
-    const newAttachments = files.map((file) => ({
+    const incoming = Array.from(e.target.files)
+    const newAttachments = incoming.map((file) => ({
       id: Date.now() + Math.random(),
       name: file.name,
       size: (file.size / (1024 * 1024)).toFixed(2) + ' MB',
       type: file.name.split('.').pop().toUpperCase(),
     }))
     setAttachments([...attachments, ...newAttachments])
+    setFiles([...files, ...incoming])
   }
 
   const removeAttachment = (id) => {
+    const idx = attachments.findIndex((item) => item.id === id)
     setAttachments(attachments.filter((item) => item.id !== id))
+    if (idx >= 0) setFiles(files.filter((_, i) => i !== idx))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     if (!paciente) return
 
     setIsSubmitting(true)
-    setTimeout(() => {
-      onAddOrder({
-        id: `ORD-${Math.floor(1000 + Math.random() * 9000)}`,
-        paciente,
-        clinica: 'Clínica Dental Esthetic',
-        tipo: tipoTrabajo,
-        material,
-        color,
-        piezas: selectedTeeth.length > 0 ? selectedTeeth : ['Arcada Completa'],
-        estado: 'Recibido',
-        fecha: new Date().toISOString().split('T')[0],
-      })
+    setSubmitError('')
+    try {
+      const order = await createOrder(
+        {
+          paciente,
+          tipo_trabajo: tipoTrabajo,
+          material,
+          color,
+          piezas: selectedTeeth,
+          indicaciones,
+        },
+        files,
+        clinica
+      )
+      onAddOrder(order)
       setPaciente('')
       setSelectedTeeth([])
       setAttachments([])
-      setIsSubmitting(false)
+      setFiles([])
+      setIndicaciones('')
       onCancel()
-    }, 1200)
+    } catch (err) {
+      setSubmitError(err.message)
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const getTypeClass = (type) =>
@@ -209,8 +224,18 @@ export default function NewOrderForm({ onAddOrder, onCancel }) {
           placeholder="Escriba aquí instrucciones específicas de oclusión, áreas de alivio, contactos o cualquier detalle clínico particular..."
           rows="3"
           className="form-textarea"
+          value={indicaciones}
+          onChange={(e) => setIndicaciones(e.target.value)}
         />
       </div>
+
+      {submitError && (
+        <div className="form-field" role="alert">
+          <p className="form-label" style={{ color: '#ef4444' }}>
+            <i className="fa-solid fa-circle-exclamation"></i> {submitError}
+          </p>
+        </div>
+      )}
 
       <div className="form-actions">
         <button type="button" onClick={onCancel} className="form-btn-cancel">

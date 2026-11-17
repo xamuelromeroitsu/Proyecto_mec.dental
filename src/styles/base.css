@@ -49,6 +49,12 @@ textarea {
   font-size: inherit;
 }
 
+/* Foco visible con el dorado de la marca (accesibilidad) */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
 table {
   border-collapse: collapse;
   width: 100%;

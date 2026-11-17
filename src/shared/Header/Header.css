@@ -1,13 +1,21 @@
 @import '../../styles/variables.css';
 
+/* =========================================================================
+   HEADER RESPONSIVO
+   - móvil  (<768px): logo + hamburguesa → panel desplegable
+   - tablet (768–1023px): links + CTAs compactos
+   - desktop (≥1024px): nav completa + CTAs
+   ========================================================================= */
+
 .header {
   position: fixed;
   width: 100%;
   background-color: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(12px);
   box-shadow: var(--shadow-sm);
+  border-bottom: 1px solid var(--color-primary-lighter);
   z-index: 40;
-  transition: all var(--transition-base);
+  transition: box-shadow var(--transition-base);
 }
 
 .header-inner {
@@ -18,6 +26,7 @@
   justify-content: space-between;
   align-items: center;
   height: var(--header-height);
+  gap: var(--space-4);
 }
 
 @media (min-width: 640px) {
@@ -29,144 +38,246 @@
 @media (min-width: 1024px) {
   .header-inner {
     padding: 0 var(--content-padding-lg);
+    height: var(--header-height-md);
   }
 }
 
+/* --- Logo -------------------------------------------------------------- */
 .header-logo {
   flex-shrink: 0;
   display: flex;
   align-items: center;
-  cursor: pointer;
-  margin-right: var(--space-4);
+  margin-right: var(--space-3);
 }
 
-@media (min-width: 640px) {
-  .header-logo {
-    margin-right: var(--space-8);
-  }
-}
-
-.header-logo img {
-  height: 3rem;
-  width: auto;
-  object-fit: contain;
-}
-
-@media (min-width: 640px) {
-  .header-logo img {
-    height: 4rem;
-  }
+.header-logo-svg {
+  width: 3rem;
 }
 
 @media (min-width: 768px) {
-  .header-logo img {
-    height: 5rem;
+  .header-logo-svg {
+    width: 3.75rem;
   }
 }
 
+/* --- Navegación de escritorio ------------------------------------------ */
 .header-nav {
+  display: none;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-4);
+  flex: 1;
+  min-width: 0;
+}
+
+@media (min-width: 768px) {
+  .header-nav {
+    display: flex;
+    gap: var(--space-6);
+  }
+}
+
+.header-links {
   display: flex;
   align-items: center;
   gap: var(--space-4);
 }
 
-@media (min-width: 640px) {
-  .header-nav {
+@media (min-width: 1024px) {
+  .header-links {
     gap: var(--space-6);
   }
 }
 
 .header-link {
-  display: none;
   color: var(--color-slate-600);
   font-weight: var(--font-medium);
-  transition: color var(--transition-base);
+  font-size: var(--text-sm);
+  padding: var(--space-1) 0;
+  border-bottom: 2px solid transparent;
+  transition: color var(--transition-fast), border-color var(--transition-fast);
+  white-space: nowrap;
 }
 
 .header-link:hover {
   color: var(--color-primary);
+  border-bottom-color: var(--color-accent);
+}
+
+/* --- Botón hamburguesa (móvil) ------------------------------------------ */
+.header-burger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--radius-lg);
+  color: var(--color-primary);
+  font-size: 1.25rem;
+  transition: background-color var(--transition-fast);
+}
+
+.header-burger:hover {
+  background-color: var(--color-primary-light);
+}
+
+.header-burger:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
 }
 
 @media (min-width: 768px) {
-  .header-link {
-    display: inline-block;
+  .header-burger {
+    display: none;
   }
 }
 
-.header-btn {
-  background-color: var(--color-primary);
-  color: var(--color-white);
-  padding: 0.5rem 1rem;
-  border-radius: var(--radius-full);
-  font-weight: var(--font-semibold);
-  font-size: var(--text-sm);
-  transition: all var(--transition-base);
-  box-shadow: var(--shadow-md);
+/* --- Menú móvil desplegable --------------------------------------------- */
+.header-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: var(--color-white);
+  border-bottom: 1px solid var(--color-primary-lighter);
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-4) var(--content-padding) var(--space-5);
+  display: grid;
+  gap: var(--space-4);
+  animation: header-menu-in 0.22s var(--ease-out-soft);
+}
+
+@keyframes header-menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.header-menu-group {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.header-menu .header-link {
+  display: block;
+  width: 100%;
+  text-align: left;
+  font-size: var(--text-base);
+  padding: var(--space-2_5, 0.625rem) var(--space-2);
+  border-radius: var(--radius-md);
+  border-bottom: none;
+}
+
+.header-menu .header-link:hover {
+  background-color: var(--color-primary-light);
+}
+
+.header-menu-actions {
+  display: grid;
+  gap: var(--space-2);
+  border-top: 1px solid var(--color-slate-200);
+  padding-top: var(--space-4);
+}
+
+.header-menu-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-slate-600);
+  font-weight: var(--font-medium);
+  padding: var(--space-2);
+  border-radius: var(--radius-md);
+}
+
+.header-menu-link:hover {
+  color: var(--color-primary);
+  background-color: var(--color-primary-light);
+}
+
+.header-menu-user {
+  padding: var(--space-2);
+  border-radius: var(--radius-md);
+  background-color: var(--color-primary-light);
+}
+
+/* --- CTAs del header ----------------------------------------------------- */
+.header-actions {
   display: flex;
   align-items: center;
-  gap: var(--space-1_5);
+  gap: var(--space-2);
 }
 
-.header-btn:hover {
-  background-color: var(--color-primary-hover);
-}
-
-@media (min-width: 640px) {
-  .header-btn {
-    padding: 0.5rem 1.5rem;
-    font-size: var(--text-base);
-    gap: var(--space-2);
+@media (min-width: 1024px) {
+  .header-actions {
+    gap: var(--space-3);
   }
 }
 
-.header-btn-icon {
+.header-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0.4375rem 0.875rem;
+  border-radius: var(--radius-full);
+  font-weight: var(--font-semibold);
   font-size: var(--text-xs);
+  white-space: nowrap;
+  transition: all var(--transition-fast);
 }
 
-@media (min-width: 640px) {
-  .header-btn-icon {
+@media (min-width: 1024px) {
+  .header-cta {
+    padding: 0.5625rem 1.25rem;
     font-size: var(--text-sm);
   }
 }
 
-.header-btn-label-mobile {
-  display: inline;
+.header-cta--primary {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  box-shadow: var(--shadow-md);
 }
 
-.header-btn-label-desktop {
-  display: none;
+.header-cta--primary:hover {
+  background-color: var(--color-primary-hover);
 }
 
-@media (min-width: 640px) {
-  .header-btn-label-mobile {
-    display: none;
-  }
-  .header-btn-label-desktop {
-    display: inline;
-  }
+.header-cta--outline {
+  border: 1.5px solid var(--color-accent);
+  color: var(--color-accent-dark);
+  background-color: var(--color-white);
 }
 
-/* Back button */
+.header-cta--outline:hover {
+  background-color: var(--color-accent-light);
+}
+
+/* --- Botón volver --------------------------------------------------------- */
 .header-back {
-  color: var(--color-slate-600);
-  font-weight: var(--font-medium);
-  transition: color var(--transition-base);
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: var(--space-2);
+  color: var(--color-slate-600);
+  font-weight: var(--font-medium);
+  transition: color var(--transition-fast);
 }
 
 .header-back:hover {
   color: var(--color-primary);
 }
 
-/* Dashboard header */
+/* --- Sesión iniciada (dashboard) ------------------------------------------- */
 .header-user {
   display: none;
   text-align: right;
 }
 
-@media (min-width: 640px) {
+@media (min-width: 768px) {
   .header-user {
     display: block;
   }
@@ -180,7 +291,7 @@
 
 .header-user-clinic {
   font-size: var(--text-xs);
-  color: var(--color-primary);
+  color: var(--color-accent-dark);
 }
 
 .header-logout {
@@ -201,46 +312,27 @@
   background-color: #fee2e2;
 }
 
-@media (min-width: 640px) {
-  .header-logout {
-    padding: 0.5rem 1rem;
-    font-size: var(--text-sm);
-    gap: var(--space-2);
-  }
-}
-
 .header-logout-label {
   display: none;
-}
-
-@media (min-width: 640px) {
-  .header-logout-label {
-    display: inline;
-  }
 }
 
 .header-logout-short {
   display: inline;
 }
 
-@media (min-width: 640px) {
+@media (min-width: 768px) {
+  .header-logout-label {
+    display: inline;
+  }
+
   .header-logout-short {
     display: none;
   }
 }
 
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: var(--space-4);
-}
-
-@media (min-width: 768px) {
-  .header {
-    height: var(--header-height-md);
-  }
-
-  .header-inner {
-    height: var(--header-height-md);
+/* --- Accesibilidad: reduce motion ------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .header-menu {
+    animation: none;
   }
 }

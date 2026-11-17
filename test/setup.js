@@ -24,12 +24,10 @@ document.createElement = vi.fn((tagName, options) => {
   return originalCreateElement(tagName, options)
 })
 
-// Fake timers para tests con setTimeout (LoginView 1500ms, NewOrderForm 1200ms)
-vi.useFakeTimers()
-
 // Cleanup global después de cada test
+// NOTA: ya no se usan fake timers globales — el auth real (Supabase/mock)
+// es async con promesas, y waitFor de RTL necesita timers reales.
 afterEach(() => {
   vi.clearAllMocks()
-  vi.clearAllTimers()
   document.body.innerHTML = ''
 })

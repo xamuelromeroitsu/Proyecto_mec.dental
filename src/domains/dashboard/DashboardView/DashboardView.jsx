@@ -18,8 +18,10 @@ export default function DashboardView({ orders, onAddOrder, authData }) {
     ? orders
     : orders.filter(o => o.tipo === activeFilter)
 
-  const completedCount = orders.filter(o => o.estado === 'Completado').length
-  const inProgressCount = orders.filter(o => o.estado === 'En Proceso').length
+  const completedCount = orders.filter(o => o.estado === 'Entregado').length
+  const inProgressCount = orders.filter(o =>
+    o.estado === 'En Diseño' || o.estado === 'En Fabricación'
+  ).length
 
   return (
     <div className="dashboard">
@@ -30,9 +32,13 @@ export default function DashboardView({ orders, onAddOrder, authData }) {
             <i className="fa-solid fa-user-md"></i>
           </div>
           <div className="profile-data">
-            <h2 className="profile-name">{authData?.user?.name || 'Dr. Alejandro Martínez'}</h2>
-            <p className="profile-clinic">{authData?.user?.clinic || 'Clínica Dental Esthetic'}</p>
-            <p className="profile-specialty">Odontología General · Estética Dental</p>
+            <h2 className="profile-name">{authData?.user?.name || 'Usuario'}</h2>
+            <p className="profile-clinic">{authData?.user?.clinic || 'Sin clínica asignada'}</p>
+            <p className="profile-specialty">
+              {authData?.user?.rol === 'tecnico' || authData?.user?.rol === 'tecnico_admin'
+                ? 'Técnico en Mecánica Dental'
+                : 'Odontología General · Estética Dental'}
+            </p>
           </div>
           <div className="profile-stats">
             <div className="profile-stat">
@@ -80,6 +86,7 @@ export default function DashboardView({ orders, onAddOrder, authData }) {
         <NewOrderForm
           onAddOrder={(o) => { onAddOrder(o); setView('feed') }}
           onCancel={() => setView('feed')}
+          clinica={authData?.clinica}
         />
       )}
     </div>

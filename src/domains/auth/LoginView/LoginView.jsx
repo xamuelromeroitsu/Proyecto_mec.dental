@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { signInWithPassword } from '../../../services/auth'
+import Logo from '../../../shared/Logo/Logo'
 import './LoginView.css'
 
 export default function LoginView({ onLoginSuccess }) {
@@ -7,7 +9,7 @@ export default function LoginView({ onLoginSuccess }) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
 
@@ -17,45 +19,48 @@ export default function LoginView({ onLoginSuccess }) {
     }
 
     setLoading(true)
-    setTimeout(() => {
+    try {
+      const authData = await signInWithPassword(email, password)
+      onLoginSuccess(authData)
+    } catch (err) {
+      setError(
+        err.message === 'Invalid login credentials'
+          ? 'Credenciales inválidas. Verifique su correo y contraseña.'
+          : err.message
+      )
+    } finally {
       setLoading(false)
-      onLoginSuccess({
-        name: 'Dr. Alejandro Martínez',
-        clinic: 'Clínica Dental Esthetic',
-        email: email,
-      })
-    }, 1500)
+    }
   }
 
   return (
     <div className="login">
       <div className="login-card">
         <div className="login-header">
-          <div className="login-icon">
-            <i className="fa-solid fa-lock"></i>
-          </div>
+          <Logo variant="full" className="login-logo" />
           <h2 className="login-title">Acceso Seguro Clínicas</h2>
           <p className="login-subtitle">
             Introduzca sus credenciales autorizadas del laboratorio.
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="login-form">
+        <form onSubmit={handleSubmit} className="login-form" data-testid="login-form">
           {error && (
-            <div className="login-error">
-              <i className="fa-solid fa-circle-exclamation login-error-icon"></i>
+            <div className="login-error" role="alert" data-testid="login-error">
+              <i className="fa-solid fa-circle-exclamation login-error-icon" aria-hidden="true"></i>
               {error}
             </div>
           )}
 
           <div className="login-field">
-            <label className="login-label">Correo Electrónico Autorizado</label>
+            <label className="login-label" htmlFor="login-email">Correo Electrónico Autorizado</label>
             <div className="login-input-wrapper">
               <i className="fa-solid fa-envelope login-input-icon"></i>
               <input
+                id="login-email"
                 type="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => { setEmail(e.target.value); setError('') }}
                 className="login-input"
                 placeholder="doctor@correo.com"
                 required
@@ -64,13 +69,14 @@ export default function LoginView({ onLoginSuccess }) {
           </div>
 
           <div className="login-field">
-            <label className="login-label">Contraseña Cifrada (SHA-256)</label>
+            <label className="login-label" htmlFor="login-password">Contraseña</label>
             <div className="login-input-wrapper">
               <i className="fa-solid fa-key login-input-icon"></i>
               <input
+                id="login-password"
                 type="password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => { setPassword(e.target.value); setError('') }}
                 className="login-input"
                 placeholder="••••••••"
                 required
@@ -81,12 +87,13 @@ export default function LoginView({ onLoginSuccess }) {
           <button
             type="submit"
             disabled={loading}
+            data-testid="login-submit"
             className={`login-submit ${loading ? 'login-submit--disabled' : 'login-submit--active'}`}
           >
             {loading ? (
               <>
                 <i className="fa-solid fa-spinner login-spinner"></i>
-                Generando Firma JWT...
+                Autenticando...
               </>
             ) : (
               <>
@@ -102,6 +109,19 @@ export default function LoginView({ onLoginSuccess }) {
             <i className="fa-solid fa-shield-halved login-security-icon"></i>
             Cifrado TLS 1.3 de extremo a extremo
           </span>
+
+          <div className="login-register" data-testid="login-register">
+            <p className="login-register-text">¿Primera vez aquí?</p>
+            <div className="login-register-actions">
+              <a href="#/registro" className="login-register-btn" data-testid="login-register-link">
+                <i className="fa-solid fa-user-plus" aria-hidden="true"></i>
+                Crear una cuenta
+              </a>
+            </div>
+            <p className="login-register-hint">
+              Clínicas con varios doctores, odontólogos invitados y pacientes.
+            </p>
+          </div>
         </div>
       </div>
     </div>
