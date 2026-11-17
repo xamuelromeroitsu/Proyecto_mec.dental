@@ -1,21 +1,15 @@
 import { useState, useEffect } from 'react'
 import Odontograma from '../Odontograma/Odontograma'
+import { WORK_TYPES, getWorkType, colorsFor, defaultColorFor } from '../../../lib/workTypes'
 import { createOrder } from '../../../services/orders'
 import './NewOrderForm.css'
 
-const VITA_SHADES = ['A1', 'A2', 'A3', 'A3.5', 'A4', 'B1', 'B2', 'B3', 'B4', 'C1', 'C2', 'C3', 'D2', 'D3', 'Transparente']
-
-const MATERIAL_OPTIONS = {
-  'Prótesis Fija': ['Zirconio Monolítico', 'Zirconio Translúcido', 'Disilicato de Litio (E-Max)', 'Metal-Porcelana', 'Provisional PMMA'],
-  'Prótesis Removible': ['Acrílico Termocurable', 'Flexible Definitivo (Nylon)', 'Esquelético (Cromo-Cobalto)', 'Rebase Blando'],
-  'Ortodoncia / Alineadores': ['Férula Essix (Retenedor)', 'Placa Hawley de Expansión', 'Placa de Ortodoncia Activa', 'Mantenedor de Espacio'],
-}
-
 export default function NewOrderForm({ onAddOrder, onCancel, clinica }) {
+  // Defaults del catálogo: Prótesis Fija · Zirconio Monolítico · A2
   const [paciente, setPaciente] = useState('')
-  const [tipoTrabajo, setTipoTrabajo] = useState('Prótesis Fija')
-  const [material, setMaterial] = useState('Zirconio Monolítico')
-  const [color, setColor] = useState('A2 VITA')
+  const [tipoTrabajo, setTipoTrabajo] = useState(WORK_TYPES[0].label)
+  const [material, setMaterial] = useState(WORK_TYPES[0].materials[0])
+  const [color, setColor] = useState(defaultColorFor(WORK_TYPES[0].label))
   const [selectedTeeth, setSelectedTeeth] = useState([])
   const [attachments, setAttachments] = useState([])
   const [files, setFiles] = useState([])
@@ -23,11 +17,15 @@ export default function NewOrderForm({ onAddOrder, onCancel, clinica }) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState('')
 
+  const materialOptions = getWorkType(tipoTrabajo).materials
+  const colorOptions = colorsFor(tipoTrabajo)
+
+  // Al cambiar el tipo, material/color se adaptan a las opciones válidas
+  // del nuevo tipo (se conservan si siguen siendo válidos).
   useEffect(() => {
-    const available = MATERIAL_OPTIONS[tipoTrabajo]
-    if (available && !available.includes(material)) {
-      setMaterial(available[0])
-    }
+    const materials = getWorkType(tipoTrabajo).materials
+    setMaterial((prev) => (materials.includes(prev) ? prev : materials[0]))
+    setColor((prev) => (colorsFor(tipoTrabajo).includes(prev) ? prev : defaultColorFor(tipoTrabajo)))
   }, [tipoTrabajo])
 
   const toggleTooth = (tooth) => {
@@ -122,10 +120,11 @@ export default function NewOrderForm({ onAddOrder, onCancel, clinica }) {
               value={tipoTrabajo}
               onChange={(e) => setTipoTrabajo(e.target.value)}
               className="form-select"
+              data-testid="select-tipo"
             >
-              <option>Prótesis Fija</option>
-              <option>Prótesis Removible</option>
-              <option>Ortodoncia / Alineadores</option>
+              {WORK_TYPES.map((t) => (
+                <option key={t.key} value={t.label}>{t.label}</option>
+              ))}
             </select>
           </div>
 
@@ -135,22 +134,24 @@ export default function NewOrderForm({ onAddOrder, onCancel, clinica }) {
               value={material}
               onChange={(e) => setMaterial(e.target.value)}
               className="form-select"
+              data-testid="select-material"
             >
-              {MATERIAL_OPTIONS[tipoTrabajo]?.map((m, idx) => (
-                <option key={idx}>{m}</option>
+              {materialOptions.map((m, idx) => (
+                <option key={idx} value={m}>{m}</option>
               ))}
             </select>
           </div>
 
           <div className="form-field">
-            <label className="form-label">Color Guía VITA</label>
+            <label className="form-label">{getWorkType(tipoTrabajo).colorGuide === 'metal' ? 'Metal Guía' : getWorkType(tipoTrabajo).colorGuide === 'na' ? 'Acabado' : 'Color Guía VITA'}</label>
             <select
               value={color}
               onChange={(e) => setColor(e.target.value)}
               className="form-select"
+              data-testid="select-color"
             >
-              {VITA_SHADES.map((sh, idx) => (
-                <option key={idx} value={`${sh} VITA`}>{sh}</option>
+              {colorOptions.map((sh, idx) => (
+                <option key={idx} value={sh}>{sh}</option>
               ))}
             </select>
           </div>
@@ -220,6 +221,12 @@ export default function NewOrderForm({ onAddOrder, onCancel, clinica }) {
 
       <div className="form-field">
         <label className="form-label">Indicaciones Técnicas Adicionales</label>
+        {tipoTrabajo === 'Grillz' && (
+          <p className="form-hint">
+            Especifica aquí las gemas y detalles: diamantes naturales, moissanitas,
+            circonitas cúbicas o esmalte dental de colores (indicando pieza y cantidad).
+          </p>
+        )}
         <textarea
           placeholder="Escriba aquí instrucciones específicas de oclusión, áreas de alivio, contactos o cualquier detalle clínico particular..."
           rows="3"

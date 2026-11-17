@@ -1,13 +1,19 @@
 import { useState } from 'react'
 import OrderFeed from '../OrderFeed/OrderFeed'
 import NewOrderForm from '../NewOrderForm/NewOrderForm'
+import { filterGroupOf } from '../../../lib/workTypes'
 import './DashboardView.css'
 
+/* Chips de búsqueda: cada clave agrupa tipos afines del catálogo
+   (lib/workTypes) + las etiquetas legadas de órdenes previas. */
 const STORIES = [
   { key: 'all', label: 'Todos', icon: 'fa-layer-group' },
-  { key: 'Prótesis Fija', label: 'Fija', icon: 'fa-teeth' },
-  { key: 'Prótesis Removible', label: 'Removible', icon: 'fa-teeth-open' },
-  { key: 'Ortodoncia / Alineadores', label: 'Ortodoncia', icon: 'fa-bezier-curve' },
+  { key: 'fija', label: 'Fija', icon: 'fa-tooth' },
+  { key: 'carillas', label: 'Carillas', icon: 'fa-face-smile' },
+  { key: 'removible', label: 'Removible', icon: 'fa-teeth-open' },
+  { key: 'grillz', label: 'Grillz', icon: 'fa-gem' },
+  { key: 'ortodoncia', label: 'Ortodoncia', icon: 'fa-bezier-curve' },
+  { key: 'proteccion', label: 'Férulas', icon: 'fa-shield-halved' },
 ]
 
 export default function DashboardView({ orders, onAddOrder, authData }) {
@@ -16,7 +22,7 @@ export default function DashboardView({ orders, onAddOrder, authData }) {
 
   const filteredOrders = activeFilter === 'all'
     ? orders
-    : orders.filter(o => o.tipo === activeFilter)
+    : orders.filter(o => filterGroupOf(o.tipo) === activeFilter)
 
   const completedCount = orders.filter(o => o.estado === 'Entregado').length
   const inProgressCount = orders.filter(o =>

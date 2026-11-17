@@ -18,12 +18,32 @@ export default function Services() {
           <ServiceCard
             icon="fa-teeth"
             title="Prótesis Fija de Alta Estética"
-            desc="Coronas, puentes y carillas premium confeccionadas en Zirconio, Disilicato de Litio (E-Max) y cerámicas feldespáticas con alta traslucidez."
+            desc="Coronas y puentes premium confeccionados en Zirconio, Disilicato de Litio (E-Max) y cerámicas feldespáticas con alta traslucidez."
+          />
+          <ServiceCard
+            icon="fa-face-smile"
+            title="Carillas Estéticas"
+            desc="Carillas de porcelana feldespática, disilicato de litio, zirconio translúcido o resina compuesta para transformar sonrisas con mínima invasión."
+          />
+          <ServiceCard
+            icon="fa-gem"
+            title="Grillz de Autor"
+            desc="Fundas estéticas removibles por encerado y colado tradicional: oro (amarillo, blanco o rosa de 10k, 14k y 18k), plata 925, platino o cromo-cobalto chapado. Personalizables con diamantes, moissanitas, circonitas o esmalte dental de colores."
           />
           <ServiceCard
             icon="fa-teeth-open"
-            title="Prótesis Removible y Flexibles"
-            desc="Estructuras de acrílico termocurado tradicionales, parciales metálicos (cromo-cobalto) y prótesis flexibles de nylon biocompatible de alta elasticidad."
+            title="Prótesis Totales y Parciales"
+            desc="Bases de resina acrílica (PMMA) termopolimerizable con dientes prefabricados de acrílico o porcelana. Parciales en acrílico con ganchos de alambre de acero inoxidable."
+          />
+          <ServiceCard
+            icon="fa-feather"
+            title="Prótesis Flexibles (Valplast)"
+            desc="Prótesis inyectadas en poliamida o nylon termoplástico biocompatible, de alta elasticidad, ligereza y retención sin ganchos visibles."
+          />
+          <ServiceCard
+            icon="fa-shield-halved"
+            title="Férulas y Protectores"
+            desc="Férulas de bruxismo en PMMA rígida, protectores bucales deportivos de lámina termoplástica blanda de etileno y férulas de blanqueamiento finas y transparentes."
           />
           <ServiceCard
             icon="fa-laptop-medical"
@@ -32,8 +52,8 @@ export default function Services() {
           />
           <ServiceCard
             icon="fa-bezier-curve"
-            title="Aparatología de Ortodoncia"
-            desc="Placas de Hawley, expansores palatinos rápidos, mantenedores de espacio y férulas termoconformadas Essix de alta durabilidad."
+            title="Ortodoncia y Ortopedia"
+            desc="Retenedores Hawley con base de acrílico y arcos de acero inoxidable, placas activas, expansores y alineadores invisibles de lámina termoplástica."
           />
           <ServiceCard
             icon="fa-screws"
