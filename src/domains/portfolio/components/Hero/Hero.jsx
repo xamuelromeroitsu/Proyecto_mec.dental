@@ -1,6 +1,8 @@
+import { Link } from 'react-router-dom'
+import { PATHS } from '../../../../app/routes'
 import './Hero.css'
 
-export default function Hero({ onNavigateLogin }) {
+export default function Hero() {
   return (
     <section id="inicio" className="hero">
       <div className="hero-inner">
@@ -20,10 +22,12 @@ export default function Hero({ onNavigateLogin }) {
           </p>
 
           <div className="hero-actions">
-            <button onClick={onNavigateLogin} className="hero-btn-primary">
-              <i className="fa-solid fa-calendar-check"></i>
-              Agendar Cita
-            </button>
+            {/* CTA de usuarios (clínicas): el alta abre el flujo para enviar
+                trabajos. El portal del técnico queda en el header. */}
+            <Link to={PATHS.REGISTER} className="hero-btn-primary">
+              <i className="fa-solid fa-paper-plane"></i>
+              Enviar un Trabajo
+            </Link>
           </div>
 
           <div className="hero-social">

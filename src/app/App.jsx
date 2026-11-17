@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { HashRouter, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom'
+import { HashRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { SessionProvider, useSession } from './SessionContext'
 import RequireAuth from './RequireAuth'
 import { PATHS } from './routes'
@@ -46,13 +46,7 @@ function DashboardRoute() {
 
 /** Landing: conserva la misma firma que usa el portfolio. */
 function LandingRoute({ carouselImages }) {
-  const navigate = useNavigate()
-  return (
-    <Presentation
-      carouselImages={carouselImages}
-      onNavigateLogin={() => navigate(PATHS.LOGIN)}
-    />
-  )
+  return <Presentation carouselImages={carouselImages} />
 }
 
 export default function App() {

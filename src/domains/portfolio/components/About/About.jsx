@@ -1,6 +1,8 @@
+import { Link } from 'react-router-dom'
+import { PATHS } from '../../../../app/routes'
 import './About.css'
 
-export default function About({ onNavigateLogin }) {
+export default function About() {
   return (
     <section id="nosotros" className="about">
       <div className="container">
@@ -40,10 +42,20 @@ export default function About({ onNavigateLogin }) {
             </div>
           </div>
           <div className="about-cta-wrapper">
-            <button onClick={onNavigateLogin} className="about-cta">
-              <i className="fa-solid fa-sign-in-alt"></i>
-              Acceder al Portal Privado
-            </button>
+            {/* Sección orientada a USUARIOS (clínicas/odontólogos/pacientes):
+                el alta va al registro, no al portal del técnico. */}
+            <Link to={PATHS.REGISTER} className="about-cta" data-testid="about-cta-register">
+              <i className="fa-solid fa-user-plus" aria-hidden="true"></i>
+              Crear una cuenta
+            </Link>
+            <div className="about-cta-aux">
+              <span className="about-cta-subtext">
+                Clínicas · Odontólogos · Pacientes
+              </span>
+              <Link to={PATHS.LOGIN} className="about-cta-secondary">
+                ¿Del laboratorio? Portal técnico
+              </Link>
+            </div>
           </div>
         </div>
       </div>

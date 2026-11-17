@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { signInWithPassword } from '../../../services/auth'
 import { isSupabaseConfigured } from '../../../services/supabase'
 import { useSession } from '../../../app/SessionContext'
@@ -9,7 +9,11 @@ import './LoginView.css'
 
 export default function LoginView({ onLoginSuccess }) {
   const navigate = useNavigate()
+  const location = useLocation()
   const { logIn } = useSession()
+  // RequireAuth guarda la página de origen en state.from: tras el login
+  // volvemos allí en vez de forzar siempre /dashboard.
+  const redirectTo = location.state?.from || PATHS.DASHBOARD
   // En modo demo (sin .env) prellenamos credenciales mock; con Supabase real,
   // los campos empiezan vacíos.
   const [email, setEmail] = useState(isSupabaseConfigured ? '' : 'demo@clinica.com')
@@ -33,7 +37,7 @@ export default function LoginView({ onLoginSuccess }) {
       // permite el acceso a /dashboard.
       await logIn(authData)
       onLoginSuccess?.(authData)
-      navigate(PATHS.DASHBOARD, { replace: true })
+      navigate(redirectTo, { replace: true })
     } catch (err) {
       setError(
         err.message === 'Invalid login credentials'

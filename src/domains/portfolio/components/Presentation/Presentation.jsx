@@ -4,13 +4,13 @@ import Services from '../Services/Services'
 import About from '../About/About'
 import Contact from '../Contact/Contact'
 
-export default function Presentation({ carouselImages, onNavigateLogin }) {
+export default function Presentation({ carouselImages }) {
   return (
     <div>
-      <Hero onNavigateLogin={onNavigateLogin} />
+      <Hero />
       <Gallery images={carouselImages} />
       <Services />
-      <About onNavigateLogin={onNavigateLogin} />
+      <About />
       <Contact />
     </div>
   )

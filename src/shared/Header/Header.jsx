@@ -93,6 +93,13 @@ export default function Header({ authData, onLogout }) {
           {authData?.user?.clinic || authData?.user?.rol}
         </p>
       </div>
+      {/* Fuera del dashboard, el usuario logueado necesita volver a su panel */}
+      {area !== 'dashboard' && (
+        <Link to={PATHS.DASHBOARD} className="header-cta header-cta--primary" data-testid="header-goto-dashboard">
+          <i className="fa-solid fa-table-columns" aria-hidden="true" />
+          <span>Ir al Panel</span>
+        </Link>
+      )}
       <button onClick={onLogout} className="header-logout">
         <i className="fa-solid fa-right-from-bracket" aria-hidden="true" />
         <span className="header-logout-label">Cerrar Sesión</span>
@@ -152,8 +159,8 @@ export default function Header({ authData, onLogout }) {
       {menuOpen && (
         <div className="header-menu" id="header-mobile-menu" data-testid="header-mobile-menu">
           {area === 'landing' && <div className="header-menu-group">{renderLinks(true)}</div>}
-          {(area === 'login' || area === 'register') && (
-            <Link to={PATHS.HOME} className="header-menu-link" ref={undefined}>
+          {area !== 'landing' && (
+            <Link to={PATHS.HOME} className="header-menu-link">
               <i className="fa-solid fa-arrow-left" aria-hidden="true" /> Volver al Inicio
             </Link>
           )}
@@ -166,10 +173,18 @@ export default function Header({ authData, onLogout }) {
 
           <div className="header-menu-actions">
             {authData ? (
-              <button onClick={onLogout} className="header-logout">
-                <i className="fa-solid fa-right-from-bracket" aria-hidden="true" />
-                Cerrar Sesión
-              </button>
+              <>
+                {area !== 'dashboard' && (
+                  <Link to={PATHS.DASHBOARD} className="header-cta header-cta--primary">
+                    <i className="fa-solid fa-table-columns" aria-hidden="true" />
+                    Ir al Panel
+                  </Link>
+                )}
+                <button onClick={onLogout} className="header-logout">
+                  <i className="fa-solid fa-right-from-bracket" aria-hidden="true" />
+                  Cerrar Sesión
+                </button>
+              </>
             ) : (
               <>
                 <Link to={PATHS.REGISTER} className="header-cta header-cta--outline">
