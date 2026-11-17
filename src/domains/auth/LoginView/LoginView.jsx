@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { signInWithPassword } from '../../../services/auth'
 import { isSupabaseConfigured } from '../../../services/supabase'
 import { useSession } from '../../../app/SessionContext'
@@ -125,10 +125,10 @@ export default function LoginView({ onLoginSuccess }) {
           <div className="login-register" data-testid="login-register">
             <p className="login-register-text">¿Primera vez aquí?</p>
             <div className="login-register-actions">
-              <a href="#/registro" className="login-register-btn" data-testid="login-register-link">
+              <Link to={PATHS.REGISTER} className="login-register-btn" data-testid="login-register-link">
                 <i className="fa-solid fa-user-plus" aria-hidden="true"></i>
                 Crear una cuenta
-              </a>
+              </Link>
             </div>
             <p className="login-register-hint">
               Clínicas con varios doctores, odontólogos invitados y pacientes.

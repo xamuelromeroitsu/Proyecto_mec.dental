@@ -16,15 +16,15 @@ vi.mock('../../../src/services/register', async (importOriginal) => ({
   friendlyRegisterError: (e) => String(e),
 }))
 
-const withRouter = (ui, { route = '/registro' } = {}) =>
+const withRouter = (ui, { route = '/register' } = {}) =>
   render(<MemoryRouter initialEntries={[route]}>{ui}</MemoryRouter>)
 
 describe('RegisterView — selector de flujos', () => {
   it('ofrece las 3 opciones mapeadas a los roles de la BD', () => {
-    withRouter(<RegisterView />, { route: '/registro' })
-    expect(screen.getByTestId('register-option-clinica')).toHaveAttribute('href', '/registro/clinica')
-    expect(screen.getByTestId('register-option-odontologo')).toHaveAttribute('href', '/registro/odontologo')
-    expect(screen.getByTestId('register-option-paciente')).toHaveAttribute('href', '/registro/paciente')
+    withRouter(<RegisterView />, { route: '/register' })
+    expect(screen.getByTestId('register-option-clinica')).toHaveAttribute('href', '/register/clinic')
+    expect(screen.getByTestId('register-option-odontologo')).toHaveAttribute('href', '/register/dentist')
+    expect(screen.getByTestId('register-option-paciente')).toHaveAttribute('href', '/register/patient')
     expect(screen.getByText(/¿ya tienes cuenta\?/i)).toBeInTheDocument()
   })
 })

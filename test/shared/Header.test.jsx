@@ -36,7 +36,7 @@ describe('Header', () => {
     expect(screen.queryByTestId('header-mobile-menu')).toBeNull()
   })
 
-  it('en /registro muestra "Volver al Inicio" y mantiene los CTAs', () => {
+  it('en /register muestra "Volver al Inicio" y mantiene los CTAs', () => {
     renderHeader(<Header authData={null} onLogout={vi.fn()} />, { route: PATHS.REGISTER })
     expect(screen.getByText(/volver al inicio/i)).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /portal técnico/i })).toBeInTheDocument()

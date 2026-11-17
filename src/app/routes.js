@@ -5,10 +5,10 @@
 export const PATHS = {
   HOME: '/',
   LOGIN: '/login',
-  REGISTER: '/registro',
-  REGISTER_CLINICA: '/registro/clinica',
-  REGISTER_ODONTOLOGO: '/registro/odontologo',
-  REGISTER_PACIENTE: '/registro/paciente',
+  REGISTER: '/register',
+  REGISTER_CLINICA: '/register/clinic',
+  REGISTER_ODONTOLOGO: '/register/dentist',
+  REGISTER_PACIENTE: '/register/patient',
   DASHBOARD: '/dashboard',
 }
 

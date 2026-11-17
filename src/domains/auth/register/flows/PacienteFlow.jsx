@@ -53,8 +53,7 @@ function PacienteStep({ initial, onNext }) {
       <div className="form-grid">
         <TextField label="Nombre completo" name="nombre" icon="fa-solid fa-user"
           autoComplete="name" required placeholder="María José Delgado" {...bind('nombre')} />
-        <TextField label="Cédula o pasaporte" name="documento" hint="Formato: V-12345678 (opcional)"
-          icon="fa-solid fa-id-card" placeholder="V-12345678" {...bind('documento')} />
+        <TextField label="Cédula o pasaporte" name="documento" icon="fa-solid fa-id-card" placeholder="V-12345678" {...bind('documento')} />
       </div>
 
       <WizardFooter />
