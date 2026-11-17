@@ -37,7 +37,7 @@ export default function Header({ authData, onLogout }) {
     setMenuOpen(false)
   }, [pathname])
 
-  // Escape cierra el menú; foco al abrirlo va al primer item
+  // Escape cierra el menú; el foco va al primer link VISIBLE del panel móvil
   useEffect(() => {
     if (!menuOpen) return
     firstMenuLinkRef.current?.focus()
@@ -58,16 +58,20 @@ export default function Header({ authData, onLogout }) {
     }
   }, [area, navigate])
 
-  const links = LANDING_LINKS.map((link, index) => (
-    <button
-      key={link.id}
-      ref={index === 0 ? firstMenuLinkRef : undefined}
-      className="header-link"
-      onClick={() => goHomeThenScroll(link.id)}
-    >
-      {link.label}
-    </button>
-  ))
+  /** Links de la landing; `withRef` marca el primero (panel móvil visible). */
+  const renderLinks = (withRef = false) =>
+    LANDING_LINKS.map((link, index) => (
+      <button
+        key={link.id}
+        ref={withRef && index === 0 ? firstMenuLinkRef : undefined}
+        className="header-link"
+        onClick={() => goHomeThenScroll(link.id)}
+      >
+        {link.label}
+      </button>
+    ))
+
+  const links = renderLinks(false)
 
   const actionsLoggedOut = (
     <>
@@ -147,7 +151,7 @@ export default function Header({ authData, onLogout }) {
       {/* Menú móvil desplegable */}
       {menuOpen && (
         <div className="header-menu" id="header-mobile-menu" data-testid="header-mobile-menu">
-          {area === 'landing' && <div className="header-menu-group">{links}</div>}
+          {area === 'landing' && <div className="header-menu-group">{renderLinks(true)}</div>}
           {(area === 'login' || area === 'register') && (
             <Link to={PATHS.HOME} className="header-menu-link" ref={undefined}>
               <i className="fa-solid fa-arrow-left" aria-hidden="true" /> Volver al Inicio

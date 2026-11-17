@@ -1,11 +1,19 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { signInWithPassword } from '../../../services/auth'
+import { isSupabaseConfigured } from '../../../services/supabase'
+import { useSession } from '../../../app/SessionContext'
+import { PATHS } from '../../../app/routes'
 import Logo from '../../../shared/Logo/Logo'
 import './LoginView.css'
 
 export default function LoginView({ onLoginSuccess }) {
-  const [email, setEmail] = useState('demo@clinica.com')
-  const [password, setPassword] = useState('password123')
+  const navigate = useNavigate()
+  const { logIn } = useSession()
+  // En modo demo (sin .env) prellenamos credenciales mock; con Supabase real,
+  // los campos empiezan vacíos.
+  const [email, setEmail] = useState(isSupabaseConfigured ? '' : 'demo@clinica.com')
+  const [password, setPassword] = useState(isSupabaseConfigured ? '' : 'password123')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -21,7 +29,11 @@ export default function LoginView({ onLoginSuccess }) {
     setLoading(true)
     try {
       const authData = await signInWithPassword(email, password)
-      onLoginSuccess(authData)
+      // Integración con el router: el contexto marca la sesión y RequireAuth
+      // permite el acceso a /dashboard.
+      await logIn(authData)
+      onLoginSuccess?.(authData)
+      navigate(PATHS.DASHBOARD, { replace: true })
     } catch (err) {
       setError(
         err.message === 'Invalid login credentials'

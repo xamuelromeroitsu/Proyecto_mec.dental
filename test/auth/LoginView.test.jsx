@@ -1,6 +1,22 @@
 import { describe, it, expect, vi, afterEach } from 'vitest'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { MemoryRouter } from 'react-router-dom'
 import LoginView from '../../src/domains/auth/LoginView/LoginView'
+import { SessionProvider } from '../../src/app/SessionContext'
+
+/**
+ * LoginView usa useNavigate (router) + useSession (contexto de sesión),
+ * así que todos los tests lo montan dentro de esos proveedores.
+ */
+function renderLogin(props = {}) {
+  return render(
+    <SessionProvider>
+      <MemoryRouter>
+        <LoginView onLoginSuccess={props.onLoginSuccess} />
+      </MemoryRouter>
+    </SessionProvider>
+  )
+}
 
 describe('LoginView', () => {
   const mockOnLoginSuccess = vi.fn()
@@ -10,7 +26,7 @@ describe('LoginView', () => {
   })
 
   it('renderiza formulario con email, password y botón', () => {
-    render(<LoginView onLoginSuccess={mockOnLoginSuccess} />)
+    renderLogin({ onLoginSuccess: mockOnLoginSuccess })
 
     expect(screen.getByLabelText(/Correo Electrónico Autorizado/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/Contraseña/i)).toBeInTheDocument()
@@ -18,7 +34,7 @@ describe('LoginView', () => {
   })
 
   it('muestra error si email está vacío al submit', () => {
-    render(<LoginView onLoginSuccess={mockOnLoginSuccess} />)
+    renderLogin({ onLoginSuccess: mockOnLoginSuccess })
 
     // Clear pre-filled values to trigger validation
     fireEvent.change(screen.getByLabelText(/Correo Electrónico Autorizado/i), { target: { value: '' } })
@@ -33,7 +49,7 @@ describe('LoginView', () => {
   })
 
   it('muestra error si password tiene menos de 6 caracteres', () => {
-    render(<LoginView onLoginSuccess={mockOnLoginSuccess} />)
+    renderLogin({ onLoginSuccess: mockOnLoginSuccess })
 
     fireEvent.change(screen.getByLabelText(/Correo Electrónico Autorizado/i), { target: { value: '' } })
     fireEvent.change(screen.getByLabelText(/Contraseña/i), { target: { value: '12345' } })
@@ -47,7 +63,7 @@ describe('LoginView', () => {
   })
 
   it('llama onLoginSuccess con authData en credenciales válidas', async () => {
-    render(<LoginView onLoginSuccess={mockOnLoginSuccess} />)
+    renderLogin({ onLoginSuccess: mockOnLoginSuccess })
 
     fireEvent.change(screen.getByLabelText(/Correo Electrónico Autorizado/i), {
       target: { value: 'doctor@clinica.com' }
@@ -70,7 +86,7 @@ describe('LoginView', () => {
   })
 
   it('muestra loading state durante autenticación', async () => {
-    render(<LoginView onLoginSuccess={mockOnLoginSuccess} />)
+    renderLogin({ onLoginSuccess: mockOnLoginSuccess })
 
     fireEvent.change(screen.getByLabelText(/Correo Electrónico Autorizado/i), {
       target: { value: 'doctor@clinica.com' }
@@ -91,7 +107,7 @@ describe('LoginView', () => {
   })
 
   it('limpia error al escribir en campos', () => {
-    render(<LoginView onLoginSuccess={mockOnLoginSuccess} />)
+    renderLogin({ onLoginSuccess: mockOnLoginSuccess })
 
     // Clear fields to trigger error first
     fireEvent.change(screen.getByLabelText(/Correo Electrónico Autorizado/i), { target: { value: '' } })
@@ -110,7 +126,7 @@ describe('LoginView', () => {
   })
 
   it('input email tiene tipo email y required', () => {
-    render(<LoginView onLoginSuccess={mockOnLoginSuccess} />)
+    renderLogin({ onLoginSuccess: mockOnLoginSuccess })
 
     const emailInput = screen.getByLabelText(/Correo Electrónico Autorizado/i)
     expect(emailInput).toHaveAttribute('type', 'email')
@@ -118,7 +134,7 @@ describe('LoginView', () => {
   })
 
   it('input password tiene tipo password y required', () => {
-    render(<LoginView onLoginSuccess={mockOnLoginSuccess} />)
+    renderLogin({ onLoginSuccess: mockOnLoginSuccess })
 
     const passwordInput = screen.getByLabelText(/Contraseña/i)
     expect(passwordInput).toHaveAttribute('type', 'password')
@@ -126,7 +142,7 @@ describe('LoginView', () => {
   })
 
   it('muestra icono de seguridad en footer', () => {
-    render(<LoginView onLoginSuccess={mockOnLoginSuccess} />)
+    renderLogin({ onLoginSuccess: mockOnLoginSuccess })
 
     expect(screen.getByText(/Cifrado TLS 1.3 de extremo a extremo/i)).toBeInTheDocument()
   })
