@@ -29,11 +29,16 @@ export default function DashboardView({ orders, onAddOrder, authData }) {
         <div className="profile-cover"></div>
         <div className="profile-info">
           <div className="profile-avatar">
-            <i className="fa-solid fa-user-md"></i>
+            <i className={`fa-solid ${authData?.user?.rol === 'tecnico' || authData?.user?.rol === 'tecnico_admin' ? 'fa-screwdriver-wrench' : 'fa-user-doctor'}`}></i>
           </div>
           <div className="profile-data">
             <h2 className="profile-name">{authData?.user?.name || 'Usuario'}</h2>
-            <p className="profile-clinic">{authData?.user?.clinic || 'Sin clínica asignada'}</p>
+            <p className="profile-clinic">
+              {authData?.user?.clinic ||
+                (authData?.user?.rol === 'tecnico' || authData?.user?.rol === 'tecnico_admin'
+                  ? 'Laboratorio Dental'
+                  : 'Sin clínica asignada')}
+            </p>
             <p className="profile-specialty">
               {authData?.user?.rol === 'tecnico' || authData?.user?.rol === 'tecnico_admin'
                 ? 'Técnico en Mecánica Dental'

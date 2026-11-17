@@ -16,7 +16,7 @@ export default function LoginView({ onLoginSuccess }) {
   const redirectTo = location.state?.from || PATHS.DASHBOARD
   // En modo demo (sin .env) prellenamos credenciales mock; con Supabase real,
   // los campos empiezan vacíos.
-  const [email, setEmail] = useState(isSupabaseConfigured ? '' : 'demo@clinica.com')
+  const [email, setEmail] = useState(isSupabaseConfigured ? '' : 'demo@kamiladentys.com')
   const [password, setPassword] = useState(isSupabaseConfigured ? '' : 'password123')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -54,9 +54,9 @@ export default function LoginView({ onLoginSuccess }) {
       <div className="login-card">
         <div className="login-header">
           <Logo variant="full" className="login-logo" />
-          <h2 className="login-title">Acceso Seguro Clínicas</h2>
+          <h2 className="login-title">Portal del Técnico Dental</h2>
           <p className="login-subtitle">
-            Introduzca sus credenciales autorizadas del laboratorio.
+            Credenciales autorizadas del laboratorio Kamila Dentys.
           </p>
         </div>
 

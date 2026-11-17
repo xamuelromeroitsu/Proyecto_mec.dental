@@ -80,8 +80,8 @@ describe('LoginView', () => {
     })
 
     const authData = mockOnLoginSuccess.mock.calls[0][0]
-    expect(authData.user.email).toBe('demo@clinica.com')
-    expect(authData.user.rol).toBe('odontologo')
+    expect(authData.user.email).toBe('demo@kamiladentys.com')
+    expect(authData.user.rol).toBe('tecnico')
     expect(authData.token).toBeTruthy()
   })
 

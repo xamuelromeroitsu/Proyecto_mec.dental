@@ -25,10 +25,19 @@ function useCurrentArea(pathname) {
   return 'landing'
 }
 
+/** Etiquetas legibles de los roles definidos en la BD (rol_usuario). */
+const ROL_LABELS = {
+  tecnico_admin: 'Dueño del Laboratorio',
+  tecnico: 'Técnico Dental',
+  odontologo: 'Odontólogo',
+  paciente: 'Paciente',
+}
+
 export default function Header({ authData, onLogout }) {
   const navigate = useNavigate()
   const { pathname } = useLocation()
   const area = useCurrentArea(pathname)
+  const sessionLabel = authData?.user?.clinic || ROL_LABELS[authData?.user?.rol] || authData?.user?.rol
   const [menuOpen, setMenuOpen] = useState(false)
   const firstMenuLinkRef = useRef(null)
 
@@ -89,9 +98,7 @@ export default function Header({ authData, onLogout }) {
     <>
       <div className="header-user" data-testid="header-user">
         <p className="header-user-name">{authData?.user?.name}</p>
-        <p className="header-user-clinic">
-          {authData?.user?.clinic || authData?.user?.rol}
-        </p>
+        <p className="header-user-clinic">{sessionLabel}</p>
       </div>
       {/* Fuera del dashboard, el usuario logueado necesita volver a su panel */}
       {area !== 'dashboard' && (
@@ -167,7 +174,7 @@ export default function Header({ authData, onLogout }) {
           {area === 'dashboard' && authData && (
             <div className="header-menu-user">
               <p className="header-user-name">{authData.user.name}</p>
-              <p className="header-user-clinic">{authData.user.clinic || authData.user.rol}</p>
+              <p className="header-user-clinic">{sessionLabel}</p>
             </div>
           )}
 

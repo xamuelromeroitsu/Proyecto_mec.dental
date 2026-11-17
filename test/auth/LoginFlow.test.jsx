@@ -36,7 +36,7 @@ describe('LoginView — integración con rutas y sesión', () => {
     mountApp()
 
     // Modo demo: campos prellenados (isSupabaseConfigured=false)
-    expect(screen.getByDisplayValue('demo@clinica.com')).toBeInTheDocument()
+    expect(screen.getByDisplayValue('demo@kamiladentys.com')).toBeInTheDocument()
 
     await user.click(screen.getByRole('button', { name: /autenticar acceso/i }))
 

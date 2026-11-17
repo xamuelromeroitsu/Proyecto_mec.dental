@@ -9,11 +9,14 @@ import { supabase, isSupabaseConfigured } from './supabase'
  * no bloquear el desarrollo ni los tests.
  */
 
+// Perfil demo del TÉCNICO de mecánica dental (sin .env configurado).
+// Mantiene el flujo real: los trabajos llegan DE las clínicas clientes
+// (INITIAL_ORDERS), no del odontólogo.
 const MOCK_USER = {
-  name: 'Dr. Alejandro Martínez',
-  clinic: 'Clínica Dental Esthetic',
-  email: 'demo@clinica.com',
-  rol: 'odontologo',
+  name: 'Kamila Dentys',
+  clinic: 'Kamila Dentys · Laboratorio Dental',
+  email: 'demo@kamiladentys.com',
+  rol: 'tecnico',
 }
 
 async function fetchPerfil(userId) {
