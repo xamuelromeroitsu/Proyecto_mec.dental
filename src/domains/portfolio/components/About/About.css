@@ -83,10 +83,14 @@
   font-size: var(--text-sm);
 }
 
+/* Bloque CTA: el botón va ARRIBA y los textos auxiliares DEBAJO,
+   centrados — como flex row el texto se apretaba al lado del botón. */
 .about-cta-wrapper {
   width: 100%;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
 }
 
 @media (min-width: 1024px) {
@@ -122,9 +126,11 @@
   background-color: var(--color-primary-light);
 }
 
-/* Bloque auxiliar bajo el CTA: público del alta + acceso técnico */
+/* Bloque auxiliar bajo el CTA: público del alta + acceso técnico.
+   CONTRASTE: vive DENTRO de la tarjeta navy — el gris slate-600 del
+   tema (pensado para fondo blanco) era ilegible aquí. Se usan blancos
+   suaves y dorado en hover. */
 .about-cta-aux {
-  margin-top: var(--space-4);
   display: grid;
   gap: var(--space-1);
   justify-items: center;
@@ -135,17 +141,17 @@
   font-weight: var(--font-semibold);
   letter-spacing: var(--tracking-wider);
   text-transform: uppercase;
-  color: var(--color-slate-400);
+  color: rgba(248, 250, 252, 0.75);
 }
 
 .about-cta-secondary {
   font-size: var(--text-sm);
   font-weight: var(--font-semibold);
-  color: var(--color-slate-600);
+  color: var(--color-white);
   transition: color var(--transition-fast);
 }
 
 .about-cta-secondary:hover {
-  color: var(--color-accent-dark);
+  color: var(--color-accent-light);
   text-decoration: underline;
 }
