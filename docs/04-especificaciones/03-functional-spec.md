@@ -29,7 +29,7 @@
 ### Epic 4: Pipeline Producción (Fase 2)
 | ID | Historia | Criterios de Aceptación |
 |----|----------|------------------------|
-| US-4.1 | Como técnico, quiero cambiar estado de orden | - Transiciones válidas: Recibido → En Diseño → En Fabricación → QC → Despacho<br>- No saltar estados<br>- Timestamp automático por transición |
+| US-4.1 | Como técnico, quiero cambiar estado de orden | - Transiciones válidas: Recibido → En Diseño → En Fabricación → Entregado (5 estados, + Cancelado)<br>- No saltar estados (validado por trigger en DB)<br>- Timestamp automático por transición |
 | US-4.2 | Como odontólogo, quiero recibir notificación de cambios | - Email / in-app al cambiar estado<br>- Link directo a orden |
 
 ### Epic 5: Panel Admin (Fase 3)
@@ -92,13 +92,15 @@ Dashboard → OrderFeed vacío → Mensaje "No hay órdenes" + icono
 
 ---
 
-## Estados de Orden (MVP vs Futuro)
+## Estados de Orden (Pipeline — 5 estados, validado por trigger en DB)
 
-| Estado MVP | Descripción | Próximos (Pipeline) |
-|------------|-------------|---------------------|
-| **Recibido** | Orden creada, pendiente revisión | → En Diseño |
-| **En Proceso** | Genérico (MVP agrupa diseño/fab/QC) | En Diseño, En Fabricación, Control Calidad |
-| **Completado** | Lista para despacho/entrega | En Despacho → Entregado |
+| Estado | Descripción | Transiciones válidas |
+|--------|-------------|---------------------|
+| **Recibido** | Orden creada, pendiente revisión | → En Diseño, Cancelado |
+| **En Diseño** | Diseño/CAD en preparación | → En Fabricación, Cancelado |
+| **En Fabricación** | Producción en el laboratorio | → Entregado, Cancelado |
+| **Entregado** | Caso entregado a la clínica | → Cancelado |
+| **Cancelado** | Caso anulado (desde cualquier estado) | — |
 
 ---
 

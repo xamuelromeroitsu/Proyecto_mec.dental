@@ -108,12 +108,12 @@ Trazabilidad real: 5 estados, transiciones válidas, notificaciones.
 
 **Total Fase 2:** ~17h
 
-### State Machine (Estados Válidos)
+### State Machine (Estados Válidos — 5 estados, validado por trigger en base de datos)
 ```
-Recibido → En Diseño → En Fabricación → Control Calidad → En Despacho
-    │           │              │                  │              │
-    └───────────┴──────────────┴──────────────────┴──────────────┘
-    (solo admin puede forzar salto, con justificación)
+Recibido → En Diseño → En Fabricación → Entregado
+    │           │              │
+    └───────────┴──────────────┴──────────────► Cancelado (desde cualquier estado)
+    (transiciones inválidas son rechazadas por `valida_transicion_estado()`)
 ```
 
 ---

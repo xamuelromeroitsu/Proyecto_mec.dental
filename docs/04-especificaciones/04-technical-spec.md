@@ -1,32 +1,28 @@
 # Especificación Técnica - Kamila Lab
 
-## Arquitectura General
+## Arquitectura General (v2 — Backend Único Multi-Sitio)
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                      CLIENT (Browser)                       │
-│  React 18 + Vite 5  │  CSS Custom Props  │  Vitest + RTL   │
-└──────────────────────────┬──────────────────────────────────┘
-                           │ HTTPS / REST API
+┌─────────────────────────────────────────────────────────────────┐
+│  N PÁGINAS (agencia) — cada una su propio front React/Vite      │
+│  Landing + Portal Odontólogo + Portal Técnico + Vista Paciente  │
+│  (solo cambian VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY)      │
+└──────────────────────────┬──────────────────────────────────────┘
+                           │ supabase-js (HTTPS / PostgREST)
                            ▼
-┌─────────────────────────────────────────────────────────────┐
-│                      API GATEWAY / LOAD BALANCER            │
-│                     (NGINX / Cloudflare)                    │
-└──────────────────────────┬──────────────────────────────────┘
-                           │
-           ┌───────────────┼───────────────┐
-           ▼               ▼               ▼
-    ┌─────────────┐ ┌─────────────┐ ┌─────────────┐
-    │  AUTH SVC   │ │ ORDER SVC   │ │ QUOTE SVC   │
-    │  (Node.js)  │ │  (Node.js)  │ │  (Node.js)  │
-    └──────┬──────┘ └──────┬──────┘ └──────┬──────┘
-           │               │               │
-           └───────────────┼───────────────┘
-                           ▼
-                ┌─────────────────────┐
-                │   POSTGRESQL DB     │
-                │   (Supabase/Managed)│
-                └─────────────────────┘
+┌─────────────────────────────────────────────────────────────────┐
+│                    SUPABASE (backend único)                     │
+│  ┌──────────┐  ┌──────────┐  ┌─────────┐  ┌──────────────────┐  │
+│  │   Auth   │  │PostgREST │  │ Storage │  │ Edge Functions   │  │
+│  │(JWT/OAuth)│ │(auto API)│  │(archivos)│  │(signup paciente, │  │
+│  └──────────┘  └──────────┘  └─────────┘  │ pagos, emails)   │  │
+│                           │               └──────────────────┘  │
+│                           ▼                                     │
+│  ┌───────────────────────────────────────────────┐              │
+│  │   PostgreSQL + ROW LEVEL SECURITY (aislamiento │              │
+│  │   por laboratorio/sitio — 13 tablas, esquema v2)│             │
+│  └───────────────────────────────────────────────┘              │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -103,84 +99,89 @@ src/
 
 ---
 
-## Backend (Planeado - Node.js)
+## Backend (Supabase — reemplaza al backend Node planeado)
 
-### API REST Endpoints
+No hay servidor propio: PostgREST expone la API automáticamente sobre las
+tablas y **RLS decide qué ve cada rol**. Lo que antes eran endpoints REST es
+ahora:
 
-#### Auth
-| Método | Endpoint | Descripción |
-|--------|----------|-------------|
-| POST | `/api/auth/login` | Email + pass → JWT (24h) |
-| POST | `/api/auth/refresh` | Refresh token → nuevo JWT |
-| GET | `/api/auth/me` | Validar JWT → user profile |
-| POST | `/api/auth/logout` | Invalidar refresh token |
+#### Auth (Supabase Auth)
+| Antes (endpoint) | Ahora (Supabase) |
+|--------|----------|
+| POST `/api/auth/login` | `supabase.auth.signInWithPassword()` |
+| POST `/api/auth/refresh` | Automático (supabase-js renueva el JWT) |
+| GET `/api/auth/me` | `supabase.auth.getUser()` + fila de `usuarios` |
+| POST `/api/auth/logout` | `supabase.auth.signOut()` |
+| Google Auth | `supabase.auth.signInWithOAuth({ provider: 'google' })` |
 
-#### Orders
-| Método | Endpoint | Descripción |
-|--------|----------|-------------|
-| GET | `/api/orders` | Listar (query: clinic_id, status, type, page, limit) |
-| POST | `/api/orders` | Crear orden (multipart/form-data para archivos) |
-| GET | `/api/orders/:id` | Detalle orden + archivos |
-| PATCH | `/api/orders/:id/status` | Cambiar estado (validar transiciones) |
-| GET | `/api/orders/:id/files` | Descargar archivos adjuntos |
+#### Datos (PostgREST — auto-generado sobre el esquema v2)
+| Antes (endpoint) | Ahora (tabla + RLS) |
+|--------|----------|
+| GET/POST `/api/orders` | `trabajos` — SELECT/INSERT con policies (tecnico/odontologo/paciente) |
+| GET `/api/orders/:id` | `trabajos` + `trabajo_piezas` + `archivos` (policies heredadas) |
+| PATCH `/api/orders/:id/status` | UPDATE `trabajos.estado` — trigger valida transición + audita |
+| GET `/api/orders/:id/files` | `archivos` + bucket `trabajos-archivos` |
+| GET `/api/quotes/materials` | Fase 2: tabla `materiales` (precios base por lab) |
+| Admin users/billing | Panel del técnico: `clinicas`, `miembros_clinica`, `pagos` (RLS por lab) |
 
-#### Quotes (Fase 2)
-| Método | Endpoint | Descripción |
-|--------|----------|-------------|
-| POST | `/api/quotes/calculate` | Body: {type, material, pieces[]} → {price, estimatedDate} |
-| GET | `/api/quotes/materials` | Lista materiales con precios base |
-
-#### Admin (Fase 3)
-| Método | Endpoint | Descripción |
-|--------|----------|-------------|
-| GET/POST | `/api/admin/materials` | CRUD inventario |
-| GET | `/api/admin/billing` | Reportes facturación (query: clinic, from, to) |
-| GET/POST/PATCH | `/api/admin/users` | Gestión clínicas/odontólogos |
+#### Edge Functions (lógica que NO va en el front)
+- `registro-paciente`: lee el dominio de origen (`sitios`) → busca/crea
+  `paciente` → INSERT `vinculos_paciente` con el técnico de esa página (R2/R3)
+- `alta-cliente-agencia`: INSERT `laboratorios` + `sitios` + `tecnico` en un paso (usa `service_role`)
+- `notificaciones`: emails/webhooks al cambiar `trabajos.estado`
 
 ---
 
-### Modelo de Datos (PostgreSQL)
+### Modelo de Datos (PostgreSQL — Supabase, multi-sitio)
 
-```sql
--- Ver base_de_datos.sql para schema completo
--- Tablas principales:
+> **Esquema v2 (multi-tenant):** soporta N laboratorios, N técnicos, N páginas
+> (sitios) con UN solo backend. Detalle completo en `base_de_datos.sql` y en el
+> [ADR 004](../02-decisiones-tecnicas/004-schema-multisitio.md).
 
-clientes (
-  id SERIAL PK,
-  nombre_odontologo VARCHAR(255),
-  clinica VARCHAR(255),
-  email VARCHAR(255) UNIQUE,
-  password_hash VARCHAR(255),
-  telefono VARCHAR(50),
-  direccion TEXT,
-  created_at TIMESTAMP
-);
-
-trabajos (
-  id SERIAL PK,
-  cliente_id INT FK → clientes.id,
-  paciente VARCHAR(100),
-  tipo_trabajo VARCHAR(100),
-  material VARCHAR(100),
-  pieza_dental INT,           -- FDI notation
-  color_vita VARCHAR(10),
-  estado VARCHAR(50) DEFAULT 'Pendiente',
-  precio DECIMAL(10,2),
-  fecha_ingreso TIMESTAMP,
-  fecha_entrega TIMESTAMP
-);
-
-pagos (
-  id SERIAL PK,
-  cliente_id INT FK,
-  trabajo_id INT FK NULL,
-  monto DECIMAL(10,2),
-  metodo_pago VARCHAR(100),
-  fecha_pago TIMESTAMP
-);
-
--- Índices: idx_clientes_email, idx_trabajos_cliente, idx_trabajos_estado
+**Jerarquía de tenancy:**
 ```
+laboratorios (raíz)
+ ├── sitios            (1 página vendida = 1 fila, dominio + técnico por defecto)
+ ├── tecnicos          (id, correo, cargo "Técnico Medio en Mecánica Dental")
+ ├── clinicas ── miembros_clinica ── usuarios (odontólogos)
+ └── pacientes ── vinculos_paciente (paciente ↔ técnico ↔ sitio)
+       └── trabajos → trabajo_piezas, pagos, archivos, historial_estados
+```
+
+**Tablas principales (todas UUID PK + FK indexadas):**
+
+| Tabla | PK / FK | Rol |
+|---|---|---|
+| `laboratorios` | UUID PK, `slug` UNIQUE | Raíz de tenancy (1 backend, N labs) |
+| `usuarios` | UUID PK FK→auth.users | Perfil de identidad (única FK a Auth) |
+| `tecnicos` | UUID PK FK→usuarios | Tabla global del técnico (email, cargo) |
+| `sitios` | UUID PK, `dominio` UNIQUE | Una fila por cada página de la agencia |
+| `clinicas` | UUID PK FK→laboratorios | Entidad separada del usuario |
+| `miembros_clinica` | PK compuesta (clinica, usuario) | N:M odontólogos↔clínicas |
+| `pacientes` | UUID PK FK→laboratorios | Entidad real del paciente (antes era VARCHAR) |
+| `vinculos_paciente` | UUID PK, `UNIQUE(usuario_id, tecnico_id)` | Registro del paciente en una página = acceso solo a ese técnico |
+| `trabajos` | UUID PK + 5 FKs | Orden de producción, ENUM `estado_trabajo` con transiciones válidas |
+| `trabajo_piezas` | PK compuesta (trabajo, pieza FDI) | N piezas por trabajo |
+| `pagos` | UUID PK | Inmutable (sin UPDATE/DELETE) |
+| `archivos` | UUID PK FK→trabajos | **Solo enlaces** (nunca el binario): `storage_path` → bucket `trabajos-archivos`, `url_externa` → plataforma externa (Cloudinary/Drive) |
+| `historial_estados` | UUID PK FK→trabajos | Auditoría automática vía trigger |
+
+**Reglas de negocio:**
+- Un técnico tiene muchos pacientes y clínicas (aisladas por `laboratorio_id`).
+- Un paciente registrado en la página A solo accede al técnico de esa página;
+  registrarse en la página B crea otro vínculo con otro técnico.
+- El técnico crea/gestiona pacientes aunque nunca se hayan registrado.
+
+**Seguridad — Row Level Security (RLS):** todas las tablas tienen RLS activo.
+Helper functions `SECURITY DEFINER` (`es_tecnico()`, `es_odontologo_clinica()`,
+`tiene_vinculo_activo()`, `es_trabajo_visible()`) evitan recursión en policies.
+Triggers: perfil automático al signup (`handle_new_user`), validación de
+transiciones de estado, `updated_at`, e historial automático.
+
+**Índices:** todos los FKs indexados + compuestos clave:
+`trabajos(laboratorio_id, estado)`, `pagos(laboratorio_id, fecha_pago DESC)`,
+`vinculos_paciente(usuario_id)`, `miembros_clinica(usuario_id)`,
+UNIQUE en `laboratorios.slug`, `sitios.dominio`, `usuarios.email`, `tecnicos.email`.
 
 ---
 
@@ -271,18 +272,20 @@ export default defineConfig({
 
 | Variable | Descripción | Requerida |
 |----------|-------------|-----------|
-| `VITE_API_BASE_URL` | Base URL del backend (ej. `https://api.kamilalab.com`) | Sí (prod) |
+| `VITE_SUPABASE_URL` | URL del proyecto Supabase (backend único de la agencia) | Sí |
+| `VITE_SUPABASE_ANON_KEY` | Clave pública anon — RLS define qué datos ve cada página | Sí |
+| `SUPABASE_SERVICE_ROLE_KEY` | Solo backend/edge functions — bypasea RLS. **Nunca en el front** | Sí (server) |
 | `VITE_APP_NAME` | Nombre app para título/meta | No |
 
 ---
 
 ## Seguridad
-- JWT en memoria (no localStorage) — MVP
+- **Supabase Auth + RLS** — el aislamiento entre laboratorios/sitios lo aplica la base de datos, no el front
+- JWT de Supabase en memoria (no localStorage) — MVP
 - HTTPS obligatorio en prod
-- CORS restringido a dominio frontend
-- Rate limiting en auth endpoints
-- Validación server-side de todos los inputs
-- Sanitización de nombres de archivo subidos
+- Validación server-side: CHECK constraints + triggers en todas las tablas (transiciones de estado, montos, piezas FDI)
+- Sin políticas DELETE en trabajos/pagos: borrado solo vía `service_role` (auditoría)
+- Sanitización de nombres de archivo subidos (bucket privado `trabajos-archivos`)
 
 ---
 

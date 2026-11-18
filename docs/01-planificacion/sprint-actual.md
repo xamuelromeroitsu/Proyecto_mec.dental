@@ -1,4 +1,39 @@
-# Sprint Actual — Testing + Refactor + Docs + Pages Fix
+# Sprint Actual — Backend Supabase + Front Conectado (Fases 1–2)
+
+**Fechas:** 2026-11-15 → en curso
+**Objetivo:** Backend único multi-sitio vivo en Supabase + front real conectado (adiós a los mocks)
+**Estado:** ✅ Fase 1 (docs + env) y Fase 2 (servicios + integración) completadas en código
+
+---
+
+## ✅ Completado en este sprint
+
+| # | Tarea | Archivos |
+|---|-------|----------|
+| 1 | Esquema v2 multi-sitio (13 tablas + RLS + triggers + índices) | `base_de_datos.sql` |
+| 2 | ADRs del nuevo backend (schema multi-sitio, storage) | `docs/02-decisiones-tecnicas/004…005` |
+| 3 | Guía de setup Supabase | `docs/01-planificacion/setup-supabase.md` |
+| 4 | Plantilla de variables de entorno | `.env.example` |
+| 5 | Cliente + servicios Supabase | `src/services/{supabase,auth,orders}.js` |
+| 6 | Login real (con fallback mock si no hay .env) | `src/domains/auth/LoginView/LoginView.jsx` |
+| 7 | App con sesión persistente + carga de órdenes por RLS | `src/App.jsx` |
+| 8 | Crear orden real: paciente + trabajo + piezas + archivos al bucket | `NewOrderForm` + `orders.js` |
+| 9 | Pipeline de 5 estados en el feed | `OrderFeed`, `DashboardView` |
+
+## 🔜 Siguientes pasos
+
+| # | Tarea | Fase |
+|---|-------|------|
+| 1 | **Manual:** crear proyecto Supabase y ejecutar el SQL (ver guía setup) | 1 |
+| 2 | Copiar `.env.example` → `.env` con las claves reales | 1 |
+| 3 | Probar login con los 2 usuarios de prueba (técnico + odontólogo) | 2 |
+| 4 | Edge Functions: `alta-cliente-agencia` + `registro-paciente` | 3 |
+| 5 | `TecnicoDashboardView`: cola de trabajos, cambio de estado, pacientes, clínicas | 4 |
+| 6 | Plantilla de front por cliente (branding por `sitio`) | 5 |
+
+---
+
+# Sprint anterior (histórico) — Testing + Refactor + Docs + Pages Fix
 
 **Fechas:** 2026-09-28 → 2026-10-04 (1 semana)
 **Objetivo:** Base de testing sólida, docs vivas, deploy funcionando, README honesto

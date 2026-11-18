@@ -18,7 +18,7 @@ El principal dolor de cabeza en el sector dental es la pérdida de tiempo en la 
 - Fecha estimada de entrega automática
 
 ### 3. Pipeline de Producción
-- Estados: Recibido → En Diseño → En Fabricación → Control de Calidad → En Despacho
+- Estados (5): Recibido → En Diseño → En Fabricación → Entregado (+ Cancelado)
 - Trazabilidad en tiempo real
 
 ### 4. Panel de Administración

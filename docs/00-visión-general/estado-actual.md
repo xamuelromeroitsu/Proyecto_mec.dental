@@ -18,7 +18,7 @@
 | **NewOrderForm** | ✅ | Paciente, tipo/material/color dependientes, Odontograma FDI 32 piezas, file upload mock, submit mock |
 | **OrderFeed** | ✅ | Cards con badges estado (Recibido/En Proceso/Completado), tags piezas, empty state |
 | **Odontograma** | ✅ | 2 arcadas (sup/inf), toggle selección, contador, limpiar todo |
-| **Base de datos** | ✅ | `base_de_datos.sql` — 3 tablas (clientes, trabajos, pagos) + índices |
+| **Base de datos** | ✅ | `base_de_datos.sql` v2 — esquema multi-sitio: 13 tablas (laboratorios, tecnicos, sitios, clinicas, pacientes, vinculos, trabajos, pagos…) + RLS + triggers + índices |
 | **GitHub Pages workflow** | ⚠️ | Build pasa local, **falla en Pages por `base` path** |
 
 ---
