@@ -30,8 +30,11 @@
   }
 }
 
+/* En desktop la grilla queda 2x2: con 4 módulos es más legible que
+   3 columnas (que dejaría una tarjeta huérfana en la segunda fila). */
 @media (min-width: 1024px) {
   .services-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-12);
   }
 }
