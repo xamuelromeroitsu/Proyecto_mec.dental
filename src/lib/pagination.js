@@ -80,7 +80,11 @@ export function paginateList(list, { cursor = null, limit = PAGE_SIZE } = {}) {
 }
 
 /* =========================================================================
- * NOTA ÍNDICE (aplicar en Supabase cuando la base crezca a producción):
+ * NOTA ÍNDICE: el índice que requiere este cursor YA ESTÁ en
+ * base_de_datos.sql (sección INDICES):
  *   CREATE INDEX idx_trabajos_keyset ON trabajos (fecha_ingreso DESC, id DESC);
- * Sin él, el filtro del cursor hace scan secuencial y pierde el beneficio.
+ * Si la BD de Supabase ya existe, aplica SOLO esa línea en el SQL Editor
+ * (no re-ejecutes el script completo). Sin él, el filtro del cursor hace
+ * scan secuencial y pierde el beneficio. Detalles: docs/02-decisiones-tecnicas/
+ * 006-paginacion-keyset.md
  * ========================================================================= */
