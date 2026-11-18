@@ -1,15 +1,30 @@
 import { supabase, isSupabaseConfigured } from './supabase'
 import { INITIAL_ORDERS } from '../data/initialData'
+import { cursorFilter, nextCursor, PAGE_SIZE, paginateList } from '../lib/pagination'
+import { filterGroupOf, WORK_TYPES } from '../lib/workTypes'
 
 /**
  * Servicio de órdenes de trabajo (tabla `trabajos` + `trabajo_piezas`).
- * RLS decide automáticamente qué órdenes ve cada usuario:
- *  - odontólogo → las de su clínica (miembros_clinica)
- *  - técnico    → las de su laboratorio completo
- *  - paciente   → las de sus vínculos activos
+ *
+ * PAGINACIÓN (por qué): con la base creciendo, traer todas las órdenes en
+ * cada login saturaría la memoria del navegador y la red. fetchOrders()
+ * devuelve UNA página (PAGE_SIZE) y un cursor para pedir la siguiente bajo
+ * demanda (botón "Cargar más" en OrderFeed). El filtro por chip también es
+ * SERVER-SIDE (los grupos de lib/workTypes → lista de tipos), así que el
+ * navegador nunca necesita "todo" para filtrar.
+ *
+ * RLS sigue decidiendo qué filas ve cada usuario:
+ *   - odontólogo → las de su clínica (miembros_clinica)
+ *   - técnico    → las de su laboratorio completo
+ *   - paciente   → las de sus vínculos activos
  */
 
 const BUCKET = 'trabajos-archivos'
+
+/** Tipos de trabajo que pertenecen a un chip/grupo del dashboard. */
+function tiposDelGrupo(grupo) {
+  return WORK_TYPES.filter((t) => t.filterGroup === grupo).map((t) => t.label)
+}
 
 /* ---------- Mapeo DB → modelo de vista (lo que espera el UI) ---------- */
 
@@ -41,17 +56,94 @@ const SELECT_TRABAJOS = `
   trabajo_piezas(pieza_dental)
 `
 
-/** Lista de órdenes visibles para el usuario actual (RLS aplica). */
-export async function fetchOrders() {
-  if (!isSupabaseConfigured) return INITIAL_ORDERS
+/**
+ * Devuelve UNA página de órdenes visibles (RLS aplica) + cursor para la siguiente.
+ *
+ * @param {object} opts
+ * @param {number} [opts.limit]      Tamaño de página (default PAGE_SIZE=8).
+ * @param {{fecha,id}|null} [opts.cursor]  Cursor de la última fila recibida
+ *        (nextCursor de la respuesta anterior). null = primera página.
+ * @param {string} [opts.grupo]      Chip activo del dashboard ('all' | 'fija'
+ *        | 'grillz' | …). Server-side vía .in('tipo_trabajo', …).
+ * @returns {Promise<{orders: Array, nextCursor: object|null, hasMore: boolean}>}
+ *
+ * DEMO (sin .env): sirve INITIAL_ORDERS por páginas en memoria con el MISMO
+ * contrato, para que la UI no sepa si hay backend o no.
+ */
+export async function fetchOrders({ limit = PAGE_SIZE, cursor = null, grupo = 'all' } = {}) {
+  if (!isSupabaseConfigured) {
+    // Modo demo: si hay chip activo, filtra igual que lo haría el server
+    // (etiquetas del catálogo + legadas vía filterGroupOf).
+    const visible = grupo === 'all'
+      ? INITIAL_ORDERS
+      : INITIAL_ORDERS.filter((o) => filterGroupOf(o.tipo) === grupo)
+    const page = paginateList(visible, { cursor, limit })
+    return page
+  }
 
-  const { data, error } = await supabase
+  let query = supabase
     .from('trabajos')
     .select(SELECT_TRABAJOS)
     .order('fecha_ingreso', { ascending: false })
+    .order('id', { ascending: false }) // desempate estable del cursor
 
+  // Filtro server-side del chip activo: nunca se descargan grupos enteros
+  // para filtrar en el navegador.
+  if (grupo !== 'all') {
+    const tipos = tiposDelGrupo(grupo)
+    // Etiquetas legadas que también pertenecen al grupo (compat. órdenes viejas)
+    const legacy = { fija: ['Prótesis Fija'], removible: ['Prótesis Removible'], ortodoncia: ['Ortodoncia / Alineadores'] }[grupo] || []
+    query = query.in('tipo_trabajo', [...tipos, ...legacy])
+  }
+
+  // Cursor keyset: (fecha, id) estrictamente anterior a la última fila
+  const filter = cursorFilter(cursor)
+  if (filter) query = query.or(filter)
+
+  // Trae limit+1: la fila extra solo existe para saber hasMore sin
+  // hacer un COUNT adicional (se descarta antes de mapear).
+  query = query.limit(limit + 1)
+
+  const { data, error } = await query
   if (error) throw error
-  return data.map(mapTrabajo)
+
+  const hasMore = data.length > limit
+  const rows = hasMore ? data.slice(0, limit) : data
+  return {
+    orders: rows.map(mapTrabajo),
+    nextCursor: hasMore ? nextCursor(rows[rows.length - 1]) : null,
+    hasMore,
+  }
+}
+
+/**
+ * Contadores del perfil (Órdenes / En curso / Completadas) SIN traer filas:
+ * 3 queries `head:true, count:'exact'` — Postgres solo devuelve el número.
+ * En demo se calculan sobre INITIAL_ORDERS.
+ */
+export async function fetchOrderStats() {
+  if (!isSupabaseConfigured) {
+    return {
+      total: INITIAL_ORDERS.length,
+      enCurso: INITIAL_ORDERS.filter((o) => ['En Diseño', 'En Fabricación', 'En Proceso'].includes(o.estado)).length,
+      completadas: INITIAL_ORDERS.filter((o) => o.estado === 'Entregado' || o.estado === 'Completado').length,
+    }
+  }
+
+  const count = async (filter) => {
+    let q = supabase.from('trabajos').select('id', { count: 'exact', head: true })
+    if (filter) q = q.in('estado', filter)
+    const { count: n, error } = await q
+    if (error) throw error
+    return n ?? 0
+  }
+
+  const [total, enCurso, completadas] = await Promise.all([
+    count(null),
+    count(['En Diseño', 'En Fabricación']),
+    count(['Entregado']),
+  ])
+  return { total, enCurso, completadas }
 }
 
 /* ------------------------- Crear una orden ---------------------------- */

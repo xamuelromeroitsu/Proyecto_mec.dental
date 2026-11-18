@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import OrderFeed from '../OrderFeed/OrderFeed'
 import NewOrderForm from '../NewOrderForm/NewOrderForm'
-import { filterGroupOf } from '../../../lib/workTypes'
+import { useSession } from '../../../app/SessionContext'
 import './DashboardView.css'
 
 /* Chips de búsqueda: cada clave agrupa tipos afines del catálogo
-   (lib/workTypes) + las etiquetas legadas de órdenes previas. */
+   (lib/workTypes) + las etiquetas legadas de órdenes previas.
+   El filtrado es SERVER-SIDE: setGroup() pide la página 1 del grupo. */
 const STORIES = [
   { key: 'all', label: 'Todos', icon: 'fa-layer-group' },
   { key: 'fija', label: 'Fija', icon: 'fa-tooth' },
@@ -16,18 +17,18 @@ const STORIES = [
   { key: 'proteccion', label: 'Férulas', icon: 'fa-shield-halved' },
 ]
 
-export default function DashboardView({ orders, onAddOrder, authData }) {
+export default function DashboardView({ onAddOrder, authData }) {
+  // El feed vive en SessionContext (máquina paginada): órdenes acumuladas,
+  // ¿hay más?, carga en vuelo, stats server-side y acciones.
+  const { orders, hasMore, loading, stats, loadMore, setGroup } = useSession()
   const [view, setView] = useState('feed')
   const [activeFilter, setActiveFilter] = useState('all')
 
-  const filteredOrders = activeFilter === 'all'
-    ? orders
-    : orders.filter(o => filterGroupOf(o.tipo) === activeFilter)
-
-  const completedCount = orders.filter(o => o.estado === 'Entregado').length
-  const inProgressCount = orders.filter(o =>
-    o.estado === 'En Diseño' || o.estado === 'En Fabricación'
-  ).length
+  /** Cambio de chip → recarga la página 1 de ese grupo desde el servidor. */
+  const changeFilter = (key) => {
+    setActiveFilter(key)
+    setGroup(key)
+  }
 
   return (
     <div className="dashboard">
@@ -52,16 +53,18 @@ export default function DashboardView({ orders, onAddOrder, authData }) {
             </p>
           </div>
           <div className="profile-stats">
+            {/* Contadores server-side (fetchOrderStats): NO dependen de las
+                filas paginadas en pantalla — reflejan TODA la base visible. */}
             <div className="profile-stat">
-              <span className="profile-stat-value">{orders.length}</span>
+              <span className="profile-stat-value">{stats.total}</span>
               <span className="profile-stat-label">Órdenes</span>
             </div>
             <div className="profile-stat">
-              <span className="profile-stat-value">{inProgressCount}</span>
+              <span className="profile-stat-value">{stats.enCurso}</span>
               <span className="profile-stat-label">En curso</span>
             </div>
             <div className="profile-stat">
-              <span className="profile-stat-value">{completedCount}</span>
+              <span className="profile-stat-value">{stats.completadas}</span>
               <span className="profile-stat-label">Completadas</span>
             </div>
           </div>
@@ -72,7 +75,7 @@ export default function DashboardView({ orders, onAddOrder, authData }) {
         {STORIES.map(s => (
           <button
             key={s.key}
-            onClick={() => setActiveFilter(s.key)}
+            onClick={() => changeFilter(s.key)}
             className={`story-btn ${activeFilter === s.key ? 'story-btn--active' : ''}`}
           >
             <div className="story-circle">
@@ -85,7 +88,14 @@ export default function DashboardView({ orders, onAddOrder, authData }) {
 
       {view === 'feed' && (
         <>
-          <OrderFeed orders={filteredOrders} />
+          {/* Feed paginado por mes: el chip ya filtra en el servidor, así que
+              `orders` llega listo (sin filtrar en cliente). */}
+          <OrderFeed
+            orders={orders}
+            hasMore={hasMore}
+            loading={loading}
+            onLoadMore={loadMore}
+          />
 
           <button onClick={() => setView('new-order')} className="fab">
             <i className="fa-solid fa-plus"></i>

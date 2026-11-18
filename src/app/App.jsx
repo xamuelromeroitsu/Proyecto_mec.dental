@@ -31,13 +31,12 @@ function Shell({ children }) {
   )
 }
 
-/** Ruta protegida: monta el dashboard con los datos de la sesión. */
+/** Ruta protegida: monta el dashboard (el feed vive en SessionContext). */
 function DashboardRoute() {
-  const { authData, orders, addOrder } = useSession()
+  const { authData, addOrder } = useSession()
   if (!authData) return null
   return (
     <DashboardView
-      orders={orders}
       onAddOrder={addOrder}
       authData={authData}
     />

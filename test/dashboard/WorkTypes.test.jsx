@@ -1,7 +1,8 @@
 import { describe, it, expect, vi } from 'vitest'
-import { render, screen, fireEvent, within } from '@testing-library/react'
+import { render, screen, fireEvent, within, waitFor } from '@testing-library/react'
 import NewOrderForm from '../../src/domains/dashboard/NewOrderForm/NewOrderForm'
 import DashboardView from '../../src/domains/dashboard/DashboardView/DashboardView'
+import { SessionProvider } from '../../src/app/SessionContext'
 
 /**
  * Catálogo de trabajos integrado al formulario y a los filtros del dashboard.
@@ -58,43 +59,51 @@ describe('NewOrderForm — selects del catálogo', () => {
 })
 
 describe('DashboardView — filtros por grupo del catálogo', () => {
-  const orders = [
-    { id: 'A', paciente: 'Paciente Fija', clinica: 'C1', tipo: 'Prótesis Fija', material: 'Zirconio', color: 'A2', piezas: ['11'], estado: 'Recibido', fecha: '2026-01-01' },
-    { id: 'B', paciente: 'Paciente Grillz', clinica: 'C1', tipo: 'Grillz', material: 'Oro Amarillo 14k', color: 'Oro Amarillo', piezas: ['6'], estado: 'Recibido', fecha: '2026-01-02' },
-    { id: 'C', paciente: 'Paciente Legada', clinica: 'C1', tipo: 'Prótesis Removible', material: 'Acrílico', color: 'A1', piezas: ['34'], estado: 'Recibido', fecha: '2026-01-03' },
-  ]
-
+  // DashboardView consume el feed desde SessionContext (máquina paginada):
+  // sin .env, fetchOrders sirve INITIAL_ORDERS en páginas (mismo contrato).
   const renderDash = () =>
     render(
-      <DashboardView orders={orders} onAddOrder={vi.fn()} authData={{ user: { name: 'Kamila', rol: 'tecnico' } }} />
+      <SessionProvider>
+        <DashboardView onAddOrder={vi.fn()} authData={{ user: { name: 'Kamila', rol: 'tecnico' } }} />
+      </SessionProvider>
     )
 
-  it('menos de 4 chips: ahora hay 7 (fija, carillas, removible, grillz, ortodoncia, férulas)', () => {
+  it('los 7 chips existen (fija, carillas, removible, grillz, ortodoncia, férulas)', () => {
     renderDash()
     for (const label of ['Todos', 'Fija', 'Carillas', 'Removible', 'Grillz', 'Ortodoncia', 'Férulas']) {
       expect(screen.getByRole('button', { name: label })).toBeInTheDocument()
     }
   })
 
-  it('el chip Grillz aísla las órdenes de grillz', () => {
+  it('el chip Grillz aísla las órdenes de grillz (filtro server-side simulado)', async () => {
     renderDash()
     fireEvent.click(screen.getByRole('button', { name: 'Grillz' }))
-    expect(screen.getByText('Paciente Grillz')).toBeInTheDocument()
-    expect(screen.queryByText('Paciente Fija')).toBeNull()
+    await waitFor(() => {
+      // INITIAL_ORDERS no tiene grillz → feed vacío, no queda una orden fija
+      expect(screen.getByText(/no hay órdenes/i)).toBeInTheDocument()
+    })
   })
 
-  it('el chip Removible incluye órdenes LEGADAS de Prótesis Removible', () => {
+  it('el chip Removible incluye órdenes LEGADAS de Prótesis Removible', async () => {
     renderDash()
     fireEvent.click(screen.getByRole('button', { name: 'Removible' }))
-    expect(screen.getByText('Paciente Legada')).toBeInTheDocument()
-    expect(screen.queryByText('Paciente Grillz')).toBeNull()
+    await waitFor(() => {
+      // Las 3 órdenes demo son 'Prótesis Removible' legacy → visibles
+      expect(screen.getAllByText(/Carlos Ernesto Gómez|Lucía Fernanda Reyes/).length).toBeGreaterThan(0)
+    })
+    // La orden de Prótesis Fija NO pertenece al grupo removible
+    expect(screen.queryByText('María José Delgado')).toBeNull()
   })
 
-  it('el chip Todos muestra el feed completo', () => {
+  it('el chip Todos muestra la primera página del feed', async () => {
     renderDash()
-    fireEvent.click(screen.getByRole('button', { name: 'Férulas' }))
+    // En demo la carga inicial depende del login (getCurrentSession → null
+    // sin .env); el clic en el chip dispara loadPage directamente.
     fireEvent.click(screen.getByRole('button', { name: 'Todos' }))
-    expect(screen.getByText('Paciente Fija')).toBeInTheDocument()
-    expect(screen.getByText('Paciente Grillz')).toBeInTheDocument()
+    await waitFor(() => {
+      expect(screen.getByText('María José Delgado')).toBeInTheDocument()
+    })
+    // Encabezado por mes del feed agrupado
+    expect(screen.getByText(/Junio 2026/)).toBeInTheDocument()
   })
 })
