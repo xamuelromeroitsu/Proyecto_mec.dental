@@ -18,7 +18,7 @@ El principal dolor de cabeza en el sector dental es la pérdida de tiempo en la 
 
 ### 3. Seguimiento de Casos (Pipeline de Producción)
 * Sistema de trazabilidad que permite al odontólogo conocer el estado exacto de su pedido en tiempo real:
-  `Recibido` ➡️ `En Diseño` ➡️ `En Fabricación` ➡️ `Control de Calidad` ➡️ `En Despacho`.
+  `Recibido` ➡️ `En Diseño` ➡️ `En Fabricación` ➡️ `Entregado`.
 
 ### 4. Panel de Administración del Laboratorio
 * Gestión interna de inventario de materiales.
@@ -30,6 +30,6 @@ El principal dolor de cabeza en el sector dental es la pérdida de tiempo en la 
 La plataforma está construida utilizando tecnologías modernas orientadas al rendimiento, escalabilidad y mantenibilidad bajo los principios de **Clean Architecture** y **SOLID**:
 
 * **Frontend:** React (Vite), Tailwind CSS.
-* **Backend:** Node.js - *Arquitectura RESTful limpia y desacoplada*.
-* **Base de Datos:** PostgreSQL / Supabase - *Esquema relacional sólido para la consistencia en el estado de las órdenes*.
+* **Backend:** Supabase (Auth + PostgreSQL + Storage + RLS) — *un solo backend para N páginas*; migración futura a backend propio prevista: solo la tabla `usuarios` depende de `auth.users`.
+* **Base de Datos:** PostgreSQL / Supabase - *esquema v2 multi-sitio con Row Level Security: laboratorios → sitios (páginas) → técnicos/clinicas/pacientes → trabajos*.
 * **Infraestructura y DevOps:** Contenedores (Docker / Podman), Git para control de versiones y despliegues optimizados.
